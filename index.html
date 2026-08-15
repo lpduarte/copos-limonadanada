@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Copos Colecionáveis — h3 LimonadaNada</title>
+  <meta name="description" content="Coleção exclusiva de 3 copos h3 ilustrados por Teresa Rego, inspirados nas LimonadaNada. 1 copo = 3 pontos da App h3. Edição limitada.">
+  <meta property="og:title" content="Queres ficar com os copos — h3">
+  <meta property="og:description" content="3 copos de autor, ilustrados por Teresa Rego. Troca 3 pontos da App h3 por cada copo, em qualquer restaurante h3.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="img/3_copos.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Queres ficar com os copos — h3">
+  <meta name="twitter:description" content="3 copos de autor. 1 copo = 3 pontos da App h3. Edição limitada.">
+  <meta name="twitter:image" content="img/3_copos.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ── Hero: imagem base dos 3 copos ─────────────────── -->
+  <div class="hero-layer">
+    <img class="hero-img" src="img/3_copos.webp" alt="Os três copos colecionáveis h3">
+  </div>
+
+  <!-- Escurecimento para leitura sobre a imagem (eixo horizontal) -->
+  <div class="scrim" id="scrim"></div>
+
+  <!-- ── Hero: texto e bifurcação ──────────────────────── -->
+  <div class="hero-text" id="hero-text">
+    <div class="hero-inner">
+      <div class="hero-kicker rv">QUERES FICAR COM OS</div>
+      <div class="hero-title rv">COPOS</div>
+      <div class="hero-sub rv">COLEÇÃO EXCLUSIVA &middot; EDIÇÃO LIMITADA</div>
+      <div class="hero-cta rv">
+        <a class="ink-link" id="limonadas-link" href="#" target="_blank" rel="noopener">Conhece as LimonadaNada<svg class="ink-underline" viewBox="0 0 50 4" preserveAspectRatio="none"><path d="M1 3C10 1 18 3 26 2C34 1 42 3 49 1.5"/></svg></a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Copos ─────────────────────────────────────────── -->
+  <!-- Os blocos são construídos por engine.js a partir de PRODUCTS -->
+  <div id="products"></div>
+
+  <!-- ── Painel: COMO FUNCIONA ─────────────────────────── -->
+  <section class="panel" id="comofunciona-panel" aria-label="Como funciona">
+    <div class="panel-content">
+      <h2 class="panel-title rv">COMO FUNCIONA</h2>
+
+      <ol class="steps">
+        <li class="step rv">
+          <span class="step-num">1</span>
+          <h3 class="step-title">Acumula pontos</h3>
+          <p class="step-body">Sempre que compras e te identificas com a App h3, acumulas pontos.</p>
+        </li>
+        <li class="step rv">
+          <span class="step-num">2</span>
+          <h3 class="step-title">Troca num restaurante</h3>
+          <p class="step-body">Vais a qualquer restaurante h3 e trocas os teus pontos por copos.</p>
+        </li>
+        <li class="step rv">
+          <span class="step-num">3</span>
+          <h3 class="step-title">Completa a coleção</h3>
+          <p class="step-body">São três. Limão, morango e maracujá. Só ficas bem servido com os três.</p>
+        </li>
+      </ol>
+
+      <div class="pill panel-pill rv">1 copo = 3 pontos</div>
+      <p class="panel-note rv">De 8 de setembro a 30 de outubro de 2026, até ao fim do stock.</p>
+    </div>
+  </section>
+
+  <!-- ── Painel: FAQ ───────────────────────────────────── -->
+  <section class="panel" id="faq-panel" aria-label="Perguntas frequentes">
+    <div class="panel-content">
+      <h2 class="panel-title rv">PERGUNTAS<br>FREQUENTES</h2>
+
+      <div class="faq rv">
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Como acumulo pontos?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Sempre que fizeres uma compra identificando-te com a tua App h3, acumulas pontos que podes trocar por recompensas exclusivas.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Quantos pontos preciso para obter um copo?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Cada copo personalizado pode ser obtido através da troca de 3 pontos acumulados na App h3.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Onde posso trocar os meus pontos?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>A troca dos pontos é efetuada diretamente em qualquer restaurante h3, onde receberás o teu copo personalizado.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Posso escolher qualquer copo?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Sim. No momento da troca, podes escolher qualquer um dos três modelos disponíveis, mediante disponibilidade de stock.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">Até quando decorre a campanha?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>A campanha decorre de 8 de setembro a 30 de outubro de 2026, ou até ao fim do stock existente.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">A campanha está sujeita ao stock existente?<span class="faq-icon" aria-hidden="true"></span></button>
+          <div class="faq-a"><p>Sim. Os copos são uma edição limitada e a campanha é válida apenas até ao fim do stock existente em cada restaurante.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Voltar (eixo horizontal) ──────────────────────── -->
+  <button class="panel-back" id="panel-back" aria-label="Voltar">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+    </svg>
+  </button>
+
+  <!-- ── Hints de navegação ────────────────────────────── -->
+  <div class="hint hint-down" id="hint-down" aria-hidden="true">
+    <span class="hint-label">conhece os copos</span>
+    <svg class="hint-mouse" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="2" width="14" height="20" rx="7"/>
+      <path d="M12 6v4"/>
+    </svg>
+    <svg class="hint-pointer" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 14a8 8 0 0 1-8 8"/>
+      <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/>
+      <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/>
+      <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/>
+      <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/>
+    </svg>
+  </div>
+
+  <div class="hint hint-right" id="hint-right" aria-hidden="true">
+    <span class="hint-script">como funciona</span>
+    <svg class="hint-arrow" width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 10C9 10 15 10 21 10" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M17 5.5L21.5 10L17 14.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.7/dist/gsap.min.js"></script>
+  <script src="js/content.js"></script>
+  <script src="js/engine.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

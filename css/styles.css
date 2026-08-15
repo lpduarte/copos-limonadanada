@@ -1,0 +1,642 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow: hidden;
+  height: 100vh;
+  background: #0a5eb5;
+  touch-action: manipulation;
+  /* O eixo horizontal usa gestos laterais — impede o swipe-to-go-back */
+  overscroll-behavior: none;
+}
+
+/* Estado inicial de tudo o que entra em cascata.
+   O deslocamento vertical é aplicado pelo engine. */
+.rv {
+  opacity: 0;
+}
+
+/* ── Hero ────────────────────────────────────────────── */
+.hero-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hero-img {
+  height: 100vh;
+  width: auto;
+  object-fit: contain;
+  will-change: transform;
+}
+
+.hero-text {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hero-inner {
+  text-align: center;
+  font-family: 'Josefin Sans', sans-serif;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  line-height: 1;
+}
+
+.hero-kicker {
+  font-size: 4.5vw;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+.hero-title {
+  font-size: 17vw;
+  font-weight: 700;
+  line-height: 0.95;
+  padding-top: 0.08em;
+}
+
+.hero-sub {
+  font-size: 1.4vw;
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  margin-top: 1.4em;
+}
+
+.hero-cta {
+  margin-top: 2.2em;
+  text-transform: none;
+  pointer-events: auto;
+}
+
+/* ── Link com sublinhado desenhado ───────────────────── */
+.ink-link {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.4vw;
+  font-weight: 300;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  letter-spacing: 0.05em;
+}
+
+.ink-underline {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: -0.15em;
+}
+
+.ink-underline path {
+  stroke: white;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  fill: none;
+}
+
+@media (hover: hover) {
+  .ink-link {
+    transition: opacity 0.3s ease;
+  }
+  .ink-link:hover {
+    opacity: 0.75;
+  }
+}
+
+/* ── Escurecimento para leitura sobre a imagem ───────── */
+.scrim {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(6, 58, 112, 0.55);
+  z-index: 19;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Copos ───────────────────────────────────────────── */
+.product-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+}
+
+.product-layer img {
+  height: 100vh;
+  width: auto;
+  object-fit: contain;
+  will-change: transform;
+}
+
+.product-text-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.product-text-wrapper {
+  text-align: center;
+  font-family: 'Josefin Sans', sans-serif;
+  color: white;
+  text-transform: uppercase;
+  text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.product-pre {
+  font-size: 5.8vw;
+  font-weight: 300;
+  line-height: 1.2;
+  margin-bottom: 70px;
+}
+
+.product-name {
+  font-size: 17vw;
+  font-weight: 700;
+  line-height: 1;
+  padding-top: 0.25em;
+  margin-top: -0.25em;
+}
+
+.product-post {
+  font-size: 5.8vw;
+  font-weight: 300;
+  white-space: nowrap;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+
+.product-body {
+  font-size: 1.4vw;
+  font-weight: 300;
+  line-height: 1.6;
+  margin-top: 35px;
+  letter-spacing: 0.03em;
+  text-transform: none;
+}
+
+/* ── Pílula (1 copo = 3 pontos) ──────────────────────── */
+.pill {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.4vw;
+  font-weight: 300;
+  text-transform: none;
+  letter-spacing: 0.05em;
+  background: white;
+  padding: 0.6em 1.5em;
+  border-radius: 100px;
+  display: inline-block;
+  text-shadow: none;
+}
+
+/* A cor do texto vem de PRODUCTS[].color, aplicada pelo engine —
+   as cores dos copos vivem num sítio só. */
+.product-pill {
+  margin-top: 70px;
+}
+
+/* ── Selo "edição limitada" ──────────────────────────── */
+.product-badge {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.badge-inner {
+  position: relative;
+  transform: rotate(15deg);
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.1));
+}
+
+.badge-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 175%;
+  height: 175%;
+  transform: translate(-50%, -50%);
+}
+
+.badge-text {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Josefin Sans', sans-serif;
+  color: white;
+  text-transform: uppercase;
+  font-size: 1.4vw;
+  line-height: 1.05;
+  text-align: center;
+}
+
+.badge-bold { font-weight: 700; }
+.badge-thin { font-weight: 300; }
+
+/* ── Painéis do eixo horizontal ──────────────────────── */
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+}
+
+#comofunciona-panel { z-index: 21; }
+#faq-panel          { z-index: 22; }
+
+.panel-content {
+  max-width: 62vw;
+  max-height: 82vh;
+  overflow-y: auto;
+  text-align: center;
+  font-family: 'Josefin Sans', sans-serif;
+  color: white;
+}
+
+.panel-title {
+  font-size: 5.8vw;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.6em;
+}
+
+/* Passos */
+.steps {
+  display: flex;
+  gap: 2.5vw;
+  list-style: none;
+  text-align: left;
+}
+
+.step {
+  flex: 1;
+  border: 2px solid white;
+  border-radius: 16px;
+  padding: 2em 1.8em;
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.2em;
+  height: 2.2em;
+  border-radius: 50%;
+  background: white;
+  color: #0a5eb5;
+  font-size: 1.4vw;
+  font-weight: 700;
+  margin-bottom: 0.9em;
+}
+
+.step-title {
+  font-size: 2.2vw;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.1;
+  margin-bottom: 0.4em;
+}
+
+.step-body {
+  font-size: 1.4vw;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.panel-pill {
+  margin-top: 2.2em;
+  color: #0a5eb5;
+  font-weight: 700;
+  font-size: 1.8vw;
+}
+
+.panel-note {
+  font-size: 1.2vw;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin-top: 1.4em;
+  opacity: 0.85;
+}
+
+/* ── FAQ ─────────────────────────────────────────────── */
+.faq {
+  text-align: left;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.faq-item {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.faq-q {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1em;
+  background: none;
+  border: none;
+  color: white;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 1.6vw;
+  font-weight: 400;
+  text-align: left;
+  line-height: 1.3;
+  padding: 1.1em 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: white;
+  transform: translateY(-50%);
+}
+
+.faq-icon::after {
+  transform: translateY(-50%) rotate(90deg);
+  transition: transform 0.3s ease;
+}
+
+.faq-q[aria-expanded="true"] .faq-icon::after {
+  transform: translateY(-50%) rotate(0deg);
+}
+
+.faq-a {
+  height: 0;
+  overflow: hidden;
+}
+
+.faq-a p {
+  font-size: 1.3vw;
+  font-weight: 300;
+  line-height: 1.7;
+  padding-bottom: 1.4em;
+  max-width: 46em;
+}
+
+@media (hover: hover) {
+  .faq-q { transition: opacity 0.25s ease; }
+  .faq-q:hover { opacity: 0.75; }
+}
+
+/* ── Voltar ──────────────────────────────────────────── */
+.panel-back {
+  position: fixed;
+  left: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+  border-radius: 50%;
+  cursor: pointer;
+  pointer-events: none;
+  z-index: 41;
+  opacity: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.panel-back * {
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .panel-back svg { transition: transform 0.3s ease; }
+  .panel-back:hover svg { transform: translateX(-3px); }
+}
+
+/* ── Hints ───────────────────────────────────────────── */
+.hint {
+  position: fixed;
+  z-index: 40;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* O centramento é feito por xPercent/yPercent no engine, não por
+   transform aqui — senão o GSAP reescreve-o ao animar o bounce. */
+.hint-down {
+  bottom: 40px;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint-label {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3rem;
+  color: white;
+  white-space: nowrap;
+}
+
+.hint-right {
+  right: 40px;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint-script {
+  font-family: 'Caveat', cursive;
+  font-size: 1.3rem;
+  color: white;
+  white-space: nowrap;
+}
+
+.hint-pointer { display: none; }
+
+/* ── Desktop: copo à direita, texto à esquerda ───────── */
+@media (min-width: 769px) {
+  .product-text-layer {
+    justify-content: flex-start;
+    padding-left: 8vw;
+  }
+
+  .product-text-wrapper {
+    text-align: left;
+    max-width: 40vw;
+  }
+
+  .product-name { font-size: 5.8vw; }
+  .product-pre  { font-size: 2.2vw; margin-bottom: 20px; }
+  .product-post { font-size: 2.2vw; }
+}
+
+/* ── Mobile ──────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hint-mouse { display: none; }
+  .hint-pointer { display: block; }
+
+  .hero-kicker { font-size: 5.5vw; }
+  .hero-title  { font-size: 22vw; }
+  .hero-sub    { font-size: 3.2vw; letter-spacing: 0.08em; }
+  .ink-link    { font-size: 3.8vw; }
+
+  .hero-inner {
+    text-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+  }
+
+  .product-text-layer {
+    align-items: stretch;
+  }
+
+  .product-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    padding: 9dvh 0 0;
+  }
+
+  .product-pre { margin-bottom: 15px; }
+
+  .product-body {
+    font-size: 3.6vw;
+    margin-top: auto;
+  }
+
+  .pill {
+    font-size: 3.6vw;
+    font-weight: 400;
+    padding: 0.5em 1.2em;
+  }
+
+  .product-pill {
+    margin-top: 15px;
+    margin-bottom: 12dvh;
+    align-self: center;
+  }
+
+  .badge-text { font-size: 5.8vw; }
+
+  .badge-inner {
+    filter: drop-shadow(0 0 30px rgba(0, 0, 0, 0.4));
+  }
+
+  #limao-badge, #maracuja-badge { left: 7vw; }
+  #limao-badge .badge-inner,
+  #maracuja-badge .badge-inner { transform: rotate(-15deg); }
+
+  #morango-badge { right: 7vw; }
+  #morango-badge .badge-inner { transform: rotate(15deg); }
+
+  /* Painéis */
+  .panel {
+    align-items: flex-start;
+  }
+
+  .panel-content {
+    max-width: 88vw;
+    max-height: 92vh;
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+  }
+
+  .panel-title { font-size: 10vw; }
+
+  .steps {
+    flex-direction: column;
+    gap: 3vw;
+  }
+
+  .step {
+    border-width: 1px;
+    padding: 1.4em 1.4em;
+  }
+
+  .step-num   { font-size: 3.6vw; }
+  .step-title { font-size: 5vw; }
+  .step-body  { font-size: 3.6vw; }
+
+  .panel-pill { font-size: 4.4vw; }
+  .panel-note { font-size: 3.2vw; }
+
+  .faq-q   { font-size: 4.2vw; }
+  .faq-a p { font-size: 3.6vw; }
+
+  /* Voltar passa para baixo, fora do caminho do polegar esquerdo */
+  .panel-back {
+    left: 50%;
+    top: auto;
+    bottom: 3vh;
+    transform: translateX(-50%);
+    border-width: 1px;
+  }
+
+  .hint-right {
+    right: 5vw;
+  }
+
+  .hint-label, .hint-script {
+    font-size: 1.1rem;
+  }
+}
