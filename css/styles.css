@@ -56,7 +56,11 @@ html, body {
   pointer-events: none;
 }
 
+/* A camada é que atravessa os cliques; a caixa de texto não.
+   Na home não há gestos, por isso o texto pode ser seleccionado —
+   e como a caixa é do tamanho do conteúdo, não tapa nada. */
 .hero-inner {
+  pointer-events: auto;
   text-align: center;
   font-family: 'Josefin Sans', sans-serif;
   color: white;
@@ -93,7 +97,6 @@ html, body {
   flex-wrap: wrap;
   gap: 0.8em;
   margin-top: 2.4em;
-  pointer-events: auto;
 }
 
 .pill-action {
