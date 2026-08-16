@@ -10,10 +10,6 @@ const COLORS = {
   maracuja: '#6b2fa0'
 };
 
-// Link para a landing page das LimonadaNada (CTA da bifurcação).
-// Substituir pelo URL final antes de publicar — ver notas_integracao.md
-const LIMONADAS_URL = 'https://www.h3.com/limonadanada';
-
 // NOTA: os campos `post` e `body` são placeholders neutros, à espera da
 // copy do h3. O nome do sabor e a pílula são conteúdo real.
 const PRODUCTS = [
@@ -77,11 +73,16 @@ const PANELS = ['comofunciona', 'faq'];
 
 // Texto dos hints de navegação, por nó e direcção.
 // Uma direcção sem texto não mostra hint (mas continua navegável).
+// A home não tem hints: sai-se de lá pelos três botões.
 const HINTS = {
-  hero:         { down: 'conhece os copos', right: 'como funciona' },
+  hero:         {},
   limao:        { down: 'copo seguinte' },
   morango:      { down: 'copo seguinte' },
   maracuja:     { down: 'voltar ao início' },
   comofunciona: { right: 'perguntas frequentes' },
   faq:          {}
 };
+
+// Nós onde a navegação por gesto está desligada. Na home a escolha é
+// entre três caminhos — um gesto não sabe qual deles o utilizador quer.
+const NO_GESTURE = ['hero'];

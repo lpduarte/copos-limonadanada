@@ -2,8 +2,6 @@
 
 buildProducts();
 
-document.getElementById('limonadas-link').href = LIMONADAS_URL;
-
 // ── FAQ: acordeão ───────────────────────────────────────
 // Uma resposta aberta de cada vez — a lista fechada cabe sempre
 // no ecrã, que é o que o formato sem scroll exige.
@@ -41,15 +39,10 @@ const introTl = gsap.timeline({
 
 revealIn(document.getElementById('hero-text'), introTl, 0);
 
-// O selo e o pan dependem de medidas do texto e da imagem — recalcula
-// as posições quando as fontes carregam e quando a janela muda.
-document.fonts.ready.then(() => {
-  PRODUCTS.forEach(p => {
-    if (document.getElementById(p.id + '-badge').style.opacity === '1') placeBadge(p);
-  });
-});
-
+// O deslocamento do copo é calculado a partir da largura da imagem e da
+// janela — ao redimensionar, o copo visível tem de acompanhar.
 window.addEventListener('resize', () => {
+  if (busy) return;
   const p = productOf(current);
-  if (p) placeBadge(p);
+  if (p) gsap.set('#' + p.id + '-layer img', cupRest());
 });

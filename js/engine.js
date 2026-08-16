@@ -49,15 +49,6 @@ function buildProducts() {
         '<div class="product-post rv">' + p.post + '</div>' +
         '<div class="product-body rv">' + p.body + '</div>' +
         '<div class="pill product-pill rv" style="color:' + p.color + '">' + p.pill + '</div>' +
-      '</div>' +
-      '<div class="product-badge" id="' + p.id + '-badge">' +
-        '<div class="badge-inner">' +
-          '<img class="badge-svg" src="img/badge.svg" alt="" aria-hidden="true">' +
-          '<div class="badge-text">' +
-            '<span class="badge-thin">EDIÇÃO</span>' +
-            '<span class="badge-bold">LIMITADA</span>' +
-          '</div>' +
-        '</div>' +
       '</div>';
     host.appendChild(text);
   });
@@ -98,83 +89,67 @@ function maxPan() {
 function revealIn(scope, tl, at) {
   tl.fromTo(scope.querySelectorAll('.rv'),
     { opacity: 0, filter: 'blur(14px)', y: 18 },
-    { opacity: 1, filter: 'blur(0px)', y: 0, duration: 0.6, stagger: 0.3, ease: EASE }, at);
+    { opacity: 1, filter: 'blur(0px)', y: 0, duration: 0.8, stagger: 0.28, ease: EASE }, at);
 }
 
 function revealOut(scope, tl, at) {
   tl.to(scope.querySelectorAll('.rv'),
-    { opacity: 0, filter: 'blur(24px)', y: -10, duration: 0.45, ease: 'power2.in' }, at);
-}
-
-// ── Selo ────────────────────────────────────────────────
-// Desktop: ancorado ao centro da imagem do copo.
-// Mobile: por baixo do subtítulo do produto.
-function placeBadge(p) {
-  const badge = document.getElementById(p.id + '-badge');
-  if (!badge) return;
-
-  if (isDesktop) {
-    const img = document.querySelector('#' + p.id + '-layer img');
-    if (!img) return;
-    const r = img.getBoundingClientRect();
-    gsap.set(badge, {
-      left: r.left + r.width / 2 + r.width * 0.05,
-      top:  r.top + r.height / 2 + r.height * 0.08
-    });
-  } else {
-    const post = document.querySelector('#' + p.id + '-text .product-post');
-    if (!post) return;
-    const pr = post.getBoundingClientRect();
-    gsap.set(badge, { top: pr.bottom + (badge.offsetHeight || 0) * 0.5 + 10 });
-  }
+    { opacity: 0, filter: 'blur(24px)', y: -10, duration: 0.6, ease: 'power2.in' }, at);
 }
 
 // ── Transição: entrar num copo (descer) ─────────────────
+// O copo só muda de posição na fronteira com o hero. Entre copos as
+// imagens estão todas no mesmo sítio e o wipe limita-se a revelar a
+// que já lá está — sem reposicionamento, sem salto.
 function enterProduct(fromId, toId, tl) {
   const p = productOf(toId);
   const layer = '#' + toId + '-layer';
   const imgEl = layer + ' img';
-  const badge = document.getElementById(toId + '-badge');
+  const fromHero = fromId === 'hero';
 
   gsap.set(layer, { clipPath: CLIP_HIDDEN_BOTTOM });
-  gsap.set(imgEl, cupHome());
+  gsap.set(imgEl, fromHero ? cupHome() : cupRest());
   gsap.set('#' + toId + '-text', { opacity: 1 });
 
   // Sai o que estava
-  if (fromId === 'hero') {
+  if (fromHero) {
     revealOut(document.getElementById('hero-text'), tl, 0);
   } else {
-    tl.to('#' + fromId + '-text', { opacity: 0, duration: 0.6, ease: 'none' }, 0);
+    tl.to('#' + fromId + '-text', { opacity: 0, duration: 0.7, ease: 'none' }, 0);
   }
 
-  tl.to(layer, { clipPath: CLIP_VISIBLE, duration: 1.5, ease: EASE_MOVE }, 0.4)
-    .to('body', { backgroundColor: p.color, duration: 1.5, ease: EASE_MOVE }, 0.4)
-    .to(imgEl, Object.assign({ duration: 1.1, ease: EASE_MOVE }, cupRest()), 0.9);
+  tl.to(layer, { clipPath: CLIP_VISIBLE, duration: 1.8, ease: EASE_MOVE }, 0.35)
+    .to('body', { backgroundColor: p.color, duration: 1.8, ease: EASE_MOVE }, 0.35);
 
-  revealIn(document.getElementById(toId + '-text'), tl, 1.5);
+  if (fromHero) {
+    tl.to(imgEl, Object.assign({ duration: 1.5, ease: EASE_MOVE }, cupRest()), 0.75);
+  }
 
-  tl.to(badge, {
-    opacity: 1, duration: 0.5, ease: EASE,
-    onStart: () => placeBadge(p)
-  }, 2.6);
+  revealIn(document.getElementById(toId + '-text'), tl, 1.6);
 }
 
 // ── Transição: sair de um copo (subir) ──────────────────
 function leaveProduct(fromId, toId, tl) {
   const layer = '#' + fromId + '-layer';
   const imgEl = layer + ' img';
-  const backColor = toId === 'hero' ? COLORS.base : productOf(toId).color;
+  const toHero = toId === 'hero';
+  const backColor = toHero ? COLORS.base : productOf(toId).color;
 
   revealOut(document.getElementById(fromId + '-text'), tl, 0);
-  tl.to('#' + fromId + '-badge', { opacity: 0, duration: 0.4, ease: 'power2.in' }, 0)
-    .to(imgEl, Object.assign({ duration: 0.8, ease: EASE_MOVE }, cupHome()), 0.2)
-    .to(layer, { clipPath: CLIP_HIDDEN_BOTTOM, duration: 1.2, ease: EASE_MOVE }, 1.0)
-    .to('body', { backgroundColor: backColor, duration: 1.2, ease: EASE_MOVE }, 1.0);
 
-  if (toId === 'hero') {
-    revealIn(document.getElementById('hero-text'), tl, 1.9);
+  // Só recentra o copo se o destino for o hero
+  const wipeAt = toHero ? 1.2 : 0.5;
+  if (toHero) {
+    tl.to(imgEl, Object.assign({ duration: 1.1, ease: EASE_MOVE }, cupHome()), 0.2);
+  }
+
+  tl.to(layer, { clipPath: CLIP_HIDDEN_BOTTOM, duration: 1.5, ease: EASE_MOVE }, wipeAt)
+    .to('body', { backgroundColor: backColor, duration: 1.5, ease: EASE_MOVE }, wipeAt);
+
+  if (toHero) {
+    revealIn(document.getElementById('hero-text'), tl, wipeAt + 1.1);
   } else {
-    tl.to('#' + toId + '-text', { opacity: 1, duration: 0.6, ease: 'none' }, 1.9);
+    tl.to('#' + toId + '-text', { opacity: 1, duration: 0.7, ease: 'none' }, wipeAt + 1.1);
   }
 }
 
@@ -185,13 +160,21 @@ function loopToHero(fromId, tl) {
   const layer = '#' + fromId + '-layer';
   const imgEl = layer + ' img';
 
-  revealOut(document.getElementById(fromId + '-text'), tl, 0);
-  tl.to('#' + fromId + '-badge', { opacity: 0, duration: 0.4, ease: 'power2.in' }, 0)
-    .to(imgEl, Object.assign({ duration: 0.8, ease: EASE_MOVE }, cupHome()), 0.2)
-    .to(layer, { clipPath: CLIP_HIDDEN_TOP, duration: 1.2, ease: EASE_MOVE }, 1.0)
-    .to('body', { backgroundColor: COLORS.base, duration: 1.2, ease: EASE_MOVE }, 1.0);
+  // Os copos anteriores continuavam revelados por baixo deste. Ao
+  // levantar o wipe apareciam de lado antes do reset — o salto.
+  // Escondem-se já, tapados pelo copo actual que ocupa o ecrã todo.
+  PRODUCTS.forEach(p => {
+    if (p.id === fromId) return;
+    gsap.set('#' + p.id + '-layer', { clipPath: CLIP_HIDDEN_BOTTOM });
+    gsap.set('#' + p.id + '-text .rv', { opacity: 0 });
+  });
 
-  revealIn(document.getElementById('hero-text'), tl, 1.9);
+  revealOut(document.getElementById(fromId + '-text'), tl, 0);
+  tl.to(imgEl, Object.assign({ duration: 1.1, ease: EASE_MOVE }, cupHome()), 0.2)
+    .to(layer, { clipPath: CLIP_HIDDEN_TOP, duration: 1.5, ease: EASE_MOVE }, 1.2)
+    .to('body', { backgroundColor: COLORS.base, duration: 1.5, ease: EASE_MOVE }, 1.2);
+
+  revealIn(document.getElementById('hero-text'), tl, 2.3);
 
   tl.add(() => {
     // Repõe os copos por baixo, prontos para nova volta.
@@ -203,9 +186,8 @@ function loopToHero(fromId, tl) {
       gsap.set('#' + p.id + '-layer img', cupHome());
       gsap.set('#' + p.id + '-text', { opacity: 1 });
       gsap.set('#' + p.id + '-text .rv', { opacity: 0 });
-      gsap.set('#' + p.id + '-badge', { opacity: 0 });
     });
-  }, 2.3);
+  }, 2.7);
 }
 
 // ── Transição: pan horizontal ───────────────────────────
@@ -214,7 +196,7 @@ function panTo(fromId, toId, tl) {
   const toIdx   = axisIndex(toId);
   const fwd     = toIdx > fromIdx;
   const step    = maxPan() / PANELS.length;
-  const D       = 1.4;
+  const D       = 1.8;
 
   // A imagem desliza e recua para segundo plano: os painéis são texto
   // denso e não competem bem com os copos nítidos por trás.
@@ -257,8 +239,11 @@ function panTo(fromId, toId, tl) {
 }
 
 // ── Despacho ────────────────────────────────────────────
-function go(dir) {
+// byButton distingue clique de gesto: nos nós em NO_GESTURE só o
+// clique passa.
+function go(dir, byButton) {
   if (busy || !ready) return;
+  if (!byButton && NO_GESTURE.includes(current)) return;
   const dest = NAV[current] && NAV[current][dir];
   if (!dest) return;
 
@@ -352,11 +337,16 @@ window.addEventListener('touchend', (e) => {
   }
 }, { passive: true });
 
-hintDown.addEventListener('click', () => go('down'));
-hintRight.addEventListener('click', () => go('right'));
-document.getElementById('panel-back').addEventListener('click', () => go('left'));
+hintDown.addEventListener('click', () => go('down', true));
+hintRight.addEventListener('click', () => go('right', true));
+document.getElementById('panel-back').addEventListener('click', () => go('left', true));
+
+// Botões da home
+document.getElementById('action-copos').addEventListener('click', () => go('down', true));
+document.getElementById('action-como').addEventListener('click', () => go('right', true));
+// "conhece as limonadas" ainda não liga a lado nenhum — ver notas
 
 window.addEventListener('keydown', (e) => {
   const keys = { ArrowDown: 'down', ArrowUp: 'up', ArrowRight: 'right', ArrowLeft: 'left' };
-  if (keys[e.key]) { e.preventDefault(); go(keys[e.key]); }
+  if (keys[e.key]) { e.preventDefault(); go(keys[e.key], true); }
 });
