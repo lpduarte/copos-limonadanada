@@ -14,10 +14,13 @@ html, body {
 }
 
 /* Estado inicial de tudo o que entra em cascata.
-   O deslocamento vertical é aplicado pelo engine. */
+   O desfoque e o deslocamento são aplicados pelo engine. */
 .rv {
   opacity: 0;
 }
+
+/* O scrim reforça o recuo da imagem no eixo horizontal;
+   sozinho não chegava para o texto denso dos painéis. */
 
 /* ── Hero ────────────────────────────────────────────── */
 .hero-layer {

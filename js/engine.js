@@ -93,16 +93,17 @@ function maxPan() {
   return Math.max(0, (img.offsetWidth - window.innerWidth) / 2);
 }
 
-// ── Reveal em cascata (sem blur: opacity + subida) ──────
+// ── Reveal em cascata ───────────────────────────────────
+// Linha a linha, a ganhar foco. É a assinatura da 1ª vaga.
 function revealIn(scope, tl, at) {
   tl.fromTo(scope.querySelectorAll('.rv'),
-    { opacity: 0, y: 12 },
-    { opacity: 1, y: 0, duration: 0.5, stagger: 0.3, ease: EASE }, at);
+    { opacity: 0, filter: 'blur(14px)', y: 18 },
+    { opacity: 1, filter: 'blur(0px)', y: 0, duration: 0.6, stagger: 0.3, ease: EASE }, at);
 }
 
 function revealOut(scope, tl, at) {
   tl.to(scope.querySelectorAll('.rv'),
-    { opacity: 0, y: -8, duration: 0.4, ease: 'power2.in' }, at);
+    { opacity: 0, filter: 'blur(24px)', y: -10, duration: 0.45, ease: 'power2.in' }, at);
 }
 
 // ── Selo ────────────────────────────────────────────────
@@ -215,7 +216,10 @@ function panTo(fromId, toId, tl) {
   const step    = maxPan() / PANELS.length;
   const D       = 1.4;
 
+  // A imagem desliza e recua para segundo plano: os painéis são texto
+  // denso e não competem bem com os copos nítidos por trás.
   tl.to('.hero-img', { x: -step * toIdx, duration: D, ease: EASE_MOVE }, 0)
+    .to('.hero-img', { filter: toIdx > 0 ? 'blur(14px)' : 'blur(0px)', duration: D, ease: EASE_MOVE }, 0)
     .to('#scrim', { opacity: toIdx > 0 ? 1 : 0, duration: D, ease: EASE_MOVE }, 0);
 
   // O hero desliza inteiro — no eixo horizontal não há cascata
