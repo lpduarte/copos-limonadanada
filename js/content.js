@@ -14,6 +14,8 @@ const COLORS = {
 // Substituir pelo URL final antes de publicar — ver notas_integracao.md
 const LIMONADAS_URL = 'https://www.h3.com/limonadanada';
 
+// NOTA: os campos `post` e `body` são placeholders neutros, à espera da
+// copy do h3. O nome do sabor e a pílula são conteúdo real.
 const PRODUCTS = [
   {
     id: 'limao',
@@ -22,8 +24,8 @@ const PRODUCTS = [
     img: 'img/limao.webp',
     alt: 'Copo h3 LimonadaNada de Limão',
     pre: 'O COPO',
-    post: 'CÍTRICO E SOLAR',
-    body: 'Ilustrado por Teresa Rego.<br>Amarelo, azul e um corte de vermelho.',
+    post: 'LOREM IPSUM DOLOR',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Sed do eiusmod tempor incididunt ut labore.',
     pill: '1 copo = 3 pontos'
   },
   {
@@ -33,8 +35,8 @@ const PRODUCTS = [
     img: 'img/morango.webp',
     alt: 'Copo h3 LimonadaNada de Morango',
     pre: 'O COPO',
-    post: 'DOCE E GRÁFICO',
-    body: 'Ilustrado por Teresa Rego.<br>Vermelho, verde e formas que não param quietas.',
+    post: 'LOREM IPSUM DOLOR',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Sed do eiusmod tempor incididunt ut labore.',
     pill: '1 copo = 3 pontos'
   },
   {
@@ -44,8 +46,8 @@ const PRODUCTS = [
     img: 'img/maracuja.webp',
     alt: 'Copo h3 LimonadaNada de Maracujá',
     pre: 'O COPO',
-    post: 'TROPICAL E VIBRANTE',
-    body: 'Ilustrado por Teresa Rego.<br>Roxo, amarelo e nada de discreto.',
+    post: 'LOREM IPSUM DOLOR',
+    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>Sed do eiusmod tempor incididunt ut labore.',
     pill: '1 copo = 3 pontos'
   }
 ];

@@ -239,10 +239,11 @@ html, body {
   opacity: 0;
 }
 
+/* O selo assenta sobre o copo, que é claro — a sombra separa-o do fundo */
 .badge-inner {
   position: relative;
   transform: rotate(15deg);
-  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 0 18px rgba(0, 0, 0, 0.45));
 }
 
 .badge-svg {
@@ -263,7 +264,7 @@ html, body {
   font-family: 'Josefin Sans', sans-serif;
   color: white;
   text-transform: uppercase;
-  font-size: 1.4vw;
+  font-size: 1.9vw;
   line-height: 1.05;
   text-align: center;
 }
@@ -559,9 +560,12 @@ html, body {
 
   .product-pre { margin-bottom: 15px; }
 
+  /* O texto cai sobre o copo, que é claro em todos os sabores —
+     a sombra é o que o mantém legível */
   .product-body {
     font-size: 3.6vw;
     margin-top: auto;
+    text-shadow: 0 0 30px rgba(0, 0, 0, 0.55), 0 1px 12px rgba(0, 0, 0, 0.4);
   }
 
   .pill {
@@ -570,9 +574,10 @@ html, body {
     padding: 0.5em 1.2em;
   }
 
+  /* Folga suficiente para o hint, que aqui tem legenda por cima do ícone */
   .product-pill {
     margin-top: 15px;
-    margin-bottom: 12dvh;
+    margin-bottom: 17dvh;
     align-self: center;
   }
 
@@ -623,17 +628,22 @@ html, body {
   .faq-q   { font-size: 4.2vw; }
   .faq-a p { font-size: 3.6vw; }
 
-  /* Voltar passa para baixo, fora do caminho do polegar esquerdo */
+  /* Voltar à esquerda, hint de avanço à direita — um em cada canto,
+     para não se sobreporem no fundo do ecrã */
   .panel-back {
-    left: 50%;
+    left: 5vw;
     top: auto;
     bottom: 3vh;
-    transform: translateX(-50%);
+    transform: none;
     border-width: 1px;
   }
 
+  /* Centrado verticalmente, o hint da direita caía por cima do conteúdo
+     dos painéis. Em mobile encosta ao canto, ao lado do botão voltar. */
   .hint-right {
     right: 5vw;
+    top: auto;
+    bottom: 3vh;
   }
 
   .hint-label, .hint-script {

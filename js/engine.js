@@ -315,8 +315,9 @@ function showHint(el, label, labelSel, motion) {
 
 // O centramento dos hints é feito por xPercent/yPercent e não por
 // translate no CSS, para o GSAP poder animar y/x sem os reescrever.
+// Em mobile o hint da direita encosta ao fundo, sem centrar.
 gsap.set(hintDown, { xPercent: -50 });
-gsap.set(hintRight, { yPercent: -50 });
+if (isDesktop) gsap.set(hintRight, { yPercent: -50 });
 
 // ── Input ───────────────────────────────────────────────
 window.addEventListener('wheel', (e) => {
