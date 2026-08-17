@@ -122,10 +122,14 @@ function enterProduct(fromId, toId, tl) {
     .to('body', { backgroundColor: p.color, duration: 1.8, ease: EASE_MOVE }, 0.35);
 
   if (fromHero) {
-    tl.to(imgEl, Object.assign({ duration: 1.5, ease: EASE_MOVE }, cupRest()), 0.75);
+    // O copo só arranca com o wipe quase concluído (2.15 = fim). Assim
+    // vê-se o copo do meio dos três tornar-se o copo de limão, parado no
+    // mesmo sítio, antes de partir para a direita. A arrancar antes, o
+    // movimento comia esse momento.
+    tl.to(imgEl, Object.assign({ duration: 1.2, ease: EASE_MOVE }, cupRest()), 1.85);
   }
 
-  revealIn(document.getElementById(toId + '-text'), tl, 1.6);
+  revealIn(document.getElementById(toId + '-text'), tl, fromHero ? 2.0 : 1.6);
 }
 
 // ── Transição: sair de um copo (subir) ──────────────────
@@ -137,10 +141,11 @@ function leaveProduct(fromId, toId, tl) {
 
   revealOut(document.getElementById(fromId + '-text'), tl, 0);
 
-  // Só recentra o copo se o destino for o hero
-  const wipeAt = toHero ? 1.2 : 0.5;
+  // Só recentra o copo se o destino for o hero — e nesse caso o wipe
+  // espera que ele chegue ao centro antes de descer.
+  const wipeAt = toHero ? 1.45 : 0.5;
   if (toHero) {
-    tl.to(imgEl, Object.assign({ duration: 1.1, ease: EASE_MOVE }, cupHome()), 0.2);
+    tl.to(imgEl, Object.assign({ duration: 1.2, ease: EASE_MOVE }, cupHome()), 0.2);
   }
 
   tl.to(layer, { clipPath: CLIP_HIDDEN_BOTTOM, duration: 1.5, ease: EASE_MOVE }, wipeAt)
@@ -169,12 +174,14 @@ function loopToHero(fromId, tl) {
     gsap.set('#' + p.id + '-text .rv', { opacity: 0 });
   });
 
+  // Simétrico da entrada: o copo recentra-se primeiro e só depois o wipe
+  // levanta, já com ele alinhado com o copo do meio dos três.
   revealOut(document.getElementById(fromId + '-text'), tl, 0);
-  tl.to(imgEl, Object.assign({ duration: 1.1, ease: EASE_MOVE }, cupHome()), 0.2)
-    .to(layer, { clipPath: CLIP_HIDDEN_TOP, duration: 1.5, ease: EASE_MOVE }, 1.2)
-    .to('body', { backgroundColor: COLORS.base, duration: 1.5, ease: EASE_MOVE }, 1.2);
+  tl.to(imgEl, Object.assign({ duration: 1.2, ease: EASE_MOVE }, cupHome()), 0.2)
+    .to(layer, { clipPath: CLIP_HIDDEN_TOP, duration: 1.5, ease: EASE_MOVE }, 1.45)
+    .to('body', { backgroundColor: COLORS.base, duration: 1.5, ease: EASE_MOVE }, 1.45);
 
-  revealIn(document.getElementById('hero-text'), tl, 2.3);
+  revealIn(document.getElementById('hero-text'), tl, 2.5);
 
   tl.add(() => {
     // Repõe os copos por baixo, prontos para nova volta.
