@@ -1,7 +1,7 @@
 // ── Conteúdo e configuração ─────────────────────────────
 // Os três blocos de copo são idênticos em estrutura, por isso vivem aqui
 // como dados e são construídos pelo engine. Os painéis do eixo horizontal
-// (como funciona, FAQ) são únicos e estão escritos no index.html.
+// (como obter, FAQ) são únicos e estão escritos no index.html.
 
 const COLORS = {
   base:     '#0a5eb5',
@@ -52,24 +52,24 @@ const PRODUCTS = [
 // Eixo vertical: os copos. Eixo horizontal: a informação da campanha.
 // O hero é a bifurcação — o único nó com saída nos dois eixos.
 //
-//                        hero ──right──▶ comofunciona ──right──▶ faq
+//                        hero ──right──▶ comoobter ──right──▶ faq
 //                          │
 //                        down
 //                          ▼
 //              limao ─▶ morango ─▶ maracuja ──down──▶ hero (loop)
 
 const NAV = {
-  hero:         { down: 'limao',    right: 'comofunciona' },
+  hero:         { down: 'limao',    right: 'comoobter' },
   limao:        { down: 'morango',  up: 'hero' },
   morango:      { down: 'maracuja', up: 'limao' },
   maracuja:     { down: 'hero',     up: 'morango' },
-  comofunciona: { right: 'faq',     left: 'hero' },
-  faq:          {                   left: 'comofunciona' }
+  comoobter: { right: 'faq',     left: 'hero' },
+  faq:          {                   left: 'comoobter' }
 };
 
 // Ordem dos painéis no eixo horizontal — define quanto a imagem
 // do hero desliza em cada passo.
-const PANELS = ['comofunciona', 'faq'];
+const PANELS = ['comoobter', 'faq'];
 
 // Texto dos hints de navegação, por nó e direcção.
 // Uma direcção sem texto não mostra hint (mas continua navegável).
@@ -79,7 +79,7 @@ const HINTS = {
   limao:        { down: 'copo seguinte' },
   morango:      { down: 'copo seguinte' },
   maracuja:     { down: 'voltar ao início' },
-  comofunciona: { right: 'perguntas frequentes' },
+  comoobter: { right: 'perguntas frequentes' },
   faq:          {}
 };
 

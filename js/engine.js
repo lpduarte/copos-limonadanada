@@ -350,7 +350,7 @@ document.getElementById('panel-back').addEventListener('click', () => go('left',
 
 // Botões da home
 document.getElementById('action-copos').addEventListener('click', () => go('down', true));
-document.getElementById('action-como').addEventListener('click', () => go('right', true));
+document.getElementById('action-obter').addEventListener('click', () => go('right', true));
 // "conhece as limonadas" ainda não liga a lado nenhum — ver notas
 
 window.addEventListener('keydown', (e) => {

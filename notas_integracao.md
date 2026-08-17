@@ -3,7 +3,7 @@
 ## Estrutura
 
 ```
-index.html          hero, painéis (como funciona, FAQ), hints
+index.html          hero, painéis (como obter, FAQ), hints
 css/styles.css
 js/content.js       conteúdo e configuração — é aqui que se mexe
 js/engine.js        motor de navegação, transições
@@ -20,7 +20,7 @@ blocos de copo são gerados a partir de `PRODUCTS[]` — não há HTML repetido.
 O site não tem scroll. O estado é um nó do grafo `NAV` em `content.js`:
 
 ```
-                  hero ──right──▶ comofunciona ──right──▶ faq
+                  hero ──right──▶ comoobter ──right──▶ faq
                     │
                   down
                     ▼
@@ -49,7 +49,7 @@ sabe qual deles o utilizador quer. Sai-se da home pelos três botões:
 | Botão | Destino |
 |---|---|
 | conhece os copos | eixo vertical, para o copo de limão |
-| como funciona | eixo horizontal, para o painel da mecânica |
+| como obter | eixo horizontal, para o painel da mecânica |
 | **conhece as limonadas** | **por ligar** — ver secção seguinte |
 
 ### Posição do copo entre blocos
@@ -101,7 +101,7 @@ produto no CSS.
 
 O briefing tinha duas datas de fim (31 de outubro no enquadramento, 30 de
 outubro na FAQ). Está implementado **30 de outubro de 2026**, em dois sítios do
-`index.html`: a nota do painel "Como Funciona" e a resposta "Até quando decorre
+`index.html`: a nota do painel "Como Obter" e a resposta "Até quando decorre
 a campanha?".
 
 ## Header
@@ -112,9 +112,17 @@ pedida no briefing é para o menu do h3.com.
 
 ## Notas técnicas
 
-- **Sem blur.** A 1ª vaga usava `filter: blur()` nos reveals e no hero; aqui os
-  reveals são `opacity` + subida de 12px, e o escurecimento do hero é feito por
-  um scrim. Menos repaints, sem os problemas de Safari da 1ª vaga.
+- **Blur nos reveals, não nas letras.** Os reveals entram de `blur(14px)` para
+  nítido, como na 1ª vaga, e a imagem do hero desfoca no eixo horizontal para
+  os painéis se lerem. O que **não** existe aqui são os efeitos por letra da
+  1ª vaga (o NADA e o AÇÚCAR a desvanecer). Vale a pena testar o eixo
+  horizontal num telemóvel real: desfocar uma imagem grande era o que dava
+  problemas de repaint em Safari na 1ª vaga.
+- **Espaço óptico no hero.** As margens do `.hero-sub` são assimétricas de
+  propósito. A caixa de uma linha de texto estende-se para lá dos glifos, e em
+  "COPOS" — caixa alta, sem descendentes — essa folga morta é de 0.218em do
+  título. Margens iguais dariam um espaço que *mede* igual mas *parece* o
+  dobro em cima. Os valores em `styles.css` já descontam essa folga.
 - **Hints**: o centramento é feito por `xPercent`/`yPercent` via GSAP e não por
   `transform` no CSS — senão o GSAP reescrevia-o ao animar o bounce.
 - **`overscroll-behavior: none`** no body impede o swipe-to-go-back do Safari e

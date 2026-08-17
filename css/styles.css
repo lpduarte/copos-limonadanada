@@ -82,13 +82,17 @@ html, body {
   padding-top: 0.08em;
 }
 
-/* O espaço acima e abaixo é o mesmo, e vive todo aqui — os botões não
-   acrescentam margem, senão as duas folgas deixavam de ser simétricas. */
+/* Espaço ÓPTICO igual acima e abaixo (~4.08vw, medido entre a mancha
+   das letras). As margens são assimétricas de propósito: a caixa de
+   "COPOS" estende-se 3.71vw abaixo das letras — 0.218em do título, que
+   sendo caixa alta não tem descendentes a ocupar essa folga. Essa folga
+   morta desconta-se à margem de cima, senão o espaço mede igual mas
+   parece o dobro. Os botões não trazem margem própria. */
 .hero-sub {
   font-size: 1.4vw;
   font-weight: 700;
   letter-spacing: 0.12em;
-  margin: 1.6em auto;
+  margin: 0.43vw auto 4.05vw;
 }
 
 /* ── Botões do hero ──────────────────────────────────── */
@@ -240,8 +244,8 @@ html, body {
   opacity: 0;
 }
 
-#comofunciona-panel { z-index: 21; }
-#faq-panel          { z-index: 22; }
+#comoobter-panel { z-index: 21; }
+#faq-panel       { z-index: 22; }
 
 .panel-content {
   max-width: 62vw;
@@ -494,12 +498,15 @@ html, body {
 
   .hero-kicker { font-size: 5.5vw; }
   .hero-title  { font-size: 22vw; }
-  /* Sem largura máxima encostava às duas margens do ecrã */
+  /* Sem largura máxima encostava às duas margens do ecrã.
+     Mesma lógica de folga óptica: título a 22vw → 4.80vw de folga
+     morta abaixo das letras; espaço óptico alvo ~7.49vw. */
   .hero-sub {
     font-size: 3.2vw;
     letter-spacing: 0.08em;
     max-width: 80vw;
     text-wrap: balance;
+    margin: 2.90vw auto 7.36vw;
   }
 
   /* Empilhados: lado a lado não cabem sem partir o texto.
