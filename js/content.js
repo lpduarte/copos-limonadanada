@@ -52,37 +52,39 @@ const PRODUCTS = [
 // Eixo vertical: os copos. Eixo horizontal: a informação da campanha.
 // O hero é a bifurcação — o único nó com saída nos dois eixos.
 //
-//                        hero ──right──▶ comoobter ──right──▶ faq
-//                          │
-//                        down
+// O FAQ não é um nó: vive dentro do painel "como obter", em baixo,
+// alcançado por scroll normal do conteúdo.
+//
+//                        hero ──right──▶ comoobter
+//                          │                 ⋮ (scroll)
+//                        down               FAQ
 //                          ▼
 //              limao ─▶ morango ─▶ maracuja ──down──▶ hero (loop)
 
 const NAV = {
-  hero:         { down: 'limao',    right: 'comoobter' },
-  limao:        { down: 'morango',  up: 'hero' },
-  morango:      { down: 'maracuja', up: 'limao' },
-  maracuja:     { down: 'hero',     up: 'morango' },
-  comoobter: { right: 'faq',     left: 'hero' },
-  faq:          {                   left: 'comoobter' }
+  hero:      { down: 'limao',    right: 'comoobter' },
+  limao:     { down: 'morango',  up: 'hero' },
+  morango:   { down: 'maracuja', up: 'limao' },
+  maracuja:  { down: 'hero',     up: 'morango' },
+  comoobter: {                   left: 'hero' }
 };
 
-// Ordem dos painéis no eixo horizontal — define quanto a imagem
+// Painéis do eixo horizontal, por ordem — define quanto a imagem
 // do hero desliza em cada passo.
-const PANELS = ['comoobter', 'faq'];
+const PANELS = ['comoobter'];
 
 // Texto dos hints de navegação, por nó e direcção.
 // Uma direcção sem texto não mostra hint (mas continua navegável).
 // A home não tem hints: sai-se de lá pelos três botões.
 const HINTS = {
-  hero:         {},
-  limao:        { down: 'copo seguinte' },
-  morango:      { down: 'copo seguinte' },
-  maracuja:     { down: 'voltar ao início' },
-  comoobter: { right: 'perguntas frequentes' },
-  faq:          {}
+  hero:      {},
+  limao:     { down: 'copo seguinte' },
+  morango:   { down: 'copo seguinte' },
+  maracuja:  { down: 'voltar ao início' },
+  comoobter: {}
 };
 
-// Nós onde a navegação por gesto está desligada. Na home a escolha é
-// entre três caminhos — um gesto não sabe qual deles o utilizador quer.
-const NO_GESTURE = ['hero'];
+// Nós onde a navegação por gesto está desligada.
+//   hero      — dali partem três caminhos e o gesto não sabe qual
+//   comoobter — o gesto pertence ao scroll do conteúdo, não à navegação
+const NO_GESTURE = ['hero', 'comoobter'];

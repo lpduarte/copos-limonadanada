@@ -245,15 +245,18 @@ html, body {
 }
 
 #comoobter-panel { z-index: 21; }
-#faq-panel       { z-index: 22; }
 
+/* O conteúdo é que rola; o painel e o fundo ficam quietos. */
 .panel-content {
-  max-width: 62vw;
-  max-height: 82vh;
+  max-width: 78vw;
+  max-height: 86vh;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
   text-align: center;
   font-family: 'Josefin Sans', sans-serif;
   color: white;
+  padding: 2vh 0;
 }
 
 .panel-title {
@@ -265,33 +268,60 @@ html, body {
   margin-bottom: 0.6em;
 }
 
-/* Passos */
+/* ── Passos ──────────────────────────────────────────── */
 .steps {
   display: flex;
+  align-items: stretch;
   gap: 2.5vw;
   list-style: none;
-  text-align: left;
+  text-align: center;
 }
 
 .step {
+  --dia: 3vw;    /* diâmetro do círculo do número */
+  --ring: 0.6vw; /* folga entre o círculo e o corte na borda */
+  position: relative;
+  flex: 1;
+  display: flex;
+}
+
+/* O corte na borda é feito por máscara. Por isso o círculo é irmão do
+   cartão e não filho: a máscara aplica-se também aos descendentes, e o
+   número seria cortado com ela. */
+.step-card {
   flex: 1;
   border: 2px solid white;
   border-radius: 16px;
-  padding: 2em 1.8em;
+  padding: calc(var(--dia) / 2 + 1.4em) 1.6em 2em;
+  -webkit-mask: radial-gradient(circle at 50% 0,
+    transparent calc(var(--dia) / 2 + var(--ring)),
+    #000 calc(var(--dia) / 2 + var(--ring)));
+          mask: radial-gradient(circle at 50% 0,
+    transparent calc(var(--dia) / 2 + var(--ring)),
+    #000 calc(var(--dia) / 2 + var(--ring)));
 }
 
+/* A cavalo no meio da borda de cima */
 .step-num {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.2em;
-  height: 2.2em;
+  width: var(--dia);
+  height: var(--dia);
+  border: 2px solid white;
   border-radius: 50%;
-  background: white;
-  color: #0a5eb5;
-  font-size: 1.4vw;
+  color: white;
+  font-size: 1.5vw;
   font-weight: 700;
-  margin-bottom: 0.9em;
+  line-height: 1;
+  /* Centrado pela caixa, o algarismo ficava 0.33em acima do centro do
+     círculo: não tem descendentes e a métrica da fonte reserva espaço
+     em baixo que ele não usa. O padding empurra-o metade disso. */
+  padding-top: 0.65em;
 }
 
 .step-title {
@@ -299,7 +329,7 @@ html, body {
   font-weight: 700;
   text-transform: uppercase;
   line-height: 1.1;
-  margin-bottom: 0.4em;
+  margin-bottom: 0.5em;
 }
 
 .step-body {
@@ -308,22 +338,55 @@ html, body {
   line-height: 1.6;
 }
 
-.panel-pill {
-  margin-top: 2.2em;
+/* Destaque, no cartão do meio */
+.step-highlight {
+  display: inline-block;
+  margin-top: 1.2em;
+  padding: 0.55em 1.3em;
+  border-radius: 100px;
+  background: white;
   color: #0a5eb5;
+  font-size: 1.5vw;
   font-weight: 700;
-  font-size: 1.8vw;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
 }
 
-.panel-note {
+/* Validade, no cartão do fim */
+.step-note {
+  margin-top: 1.1em;
+  padding-top: 1.1em;
+  border-top: 1px solid rgba(255, 255, 255, 0.35);
   font-size: 1.2vw;
   font-weight: 300;
-  letter-spacing: 0.05em;
-  margin-top: 1.4em;
-  opacity: 0.85;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* Botão que leva ao FAQ, por scroll do conteúdo */
+.faq-cta {
+  margin-top: 2.4em;
 }
 
 /* ── FAQ ─────────────────────────────────────────────── */
+/* Vive no fim do painel "Como obter", alcançado por scroll do
+   conteúdo. O fundo não se mexe. */
+.faq-section {
+  margin-top: 14vh;
+  padding-bottom: 6vh;
+  scroll-margin-top: 2vh;
+}
+
+.faq-title {
+  font-size: 3.4vw;
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.8em;
+}
+
 .faq {
   text-align: left;
   border-top: 1px solid rgba(255, 255, 255, 0.35);
@@ -333,69 +396,21 @@ html, body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
+/* Sempre aberto — são três perguntas, não vale a pena esconder */
 .faq-q {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1em;
-  background: none;
-  border: none;
-  color: white;
-  font-family: 'Josefin Sans', sans-serif;
   font-size: 1.6vw;
-  font-weight: 400;
-  text-align: left;
+  font-weight: 700;
   line-height: 1.3;
-  padding: 1.1em 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.faq-icon {
-  position: relative;
-  flex-shrink: 0;
-  width: 1em;
-  height: 1em;
-}
-
-.faq-icon::before,
-.faq-icon::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  background: white;
-  transform: translateY(-50%);
-}
-
-.faq-icon::after {
-  transform: translateY(-50%) rotate(90deg);
-  transition: transform 0.3s ease;
-}
-
-.faq-q[aria-expanded="true"] .faq-icon::after {
-  transform: translateY(-50%) rotate(0deg);
+  text-transform: none;
+  padding-top: 1.4em;
 }
 
 .faq-a {
-  height: 0;
-  overflow: hidden;
-}
-
-.faq-a p {
   font-size: 1.3vw;
   font-weight: 300;
   line-height: 1.7;
+  padding-top: 0.5em;
   padding-bottom: 1.4em;
-  max-width: 46em;
-}
-
-@media (hover: hover) {
-  .faq-q { transition: opacity 0.25s ease; }
-  .faq-q:hover { opacity: 0.75; }
 }
 
 /* ── Voltar ──────────────────────────────────────────── */
@@ -451,21 +466,6 @@ html, body {
 }
 
 .hint-label {
-  font-family: 'Caveat', cursive;
-  font-size: 1.3rem;
-  color: white;
-  white-space: nowrap;
-}
-
-.hint-right {
-  right: 40px;
-  top: 50%;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.hint-script {
   font-family: 'Caveat', cursive;
   font-size: 1.3rem;
   color: white;
@@ -571,26 +571,33 @@ html, body {
 
   .steps {
     flex-direction: column;
-    gap: 3vw;
+    gap: 9vw;
   }
 
   .step {
-    border-width: 1px;
-    padding: 1.4em 1.4em;
+    --dia: 10vw;
+    --ring: 1.8vw;
   }
 
-  .step-num   { font-size: 3.6vw; }
+  .step-card {
+    border-width: 1px;
+    padding: calc(var(--dia) / 2 + 1em) 1.2em 1.6em;
+  }
+
+  .step-num   { font-size: 4.6vw; border-width: 1px; }
   .step-title { font-size: 5vw; }
   .step-body  { font-size: 3.6vw; }
 
-  .panel-pill { font-size: 4.4vw; }
-  .panel-note { font-size: 3.2vw; }
+  .step-highlight { font-size: 4.4vw; }
+  .step-note      { font-size: 3.2vw; }
 
-  .faq-q   { font-size: 4.2vw; }
-  .faq-a p { font-size: 3.6vw; }
+  .faq-title { font-size: 7.5vw; }
+  .faq-q     { font-size: 4.6vw; }
+  .faq-a     { font-size: 3.6vw; }
 
-  /* Voltar à esquerda, hint de avanço à direita — um em cada canto,
-     para não se sobreporem no fundo do ecrã */
+  .faq-section { margin-top: 10vh; }
+
+  /* Voltar no canto, fora do caminho do conteúdo que rola */
   .panel-back {
     left: 5vw;
     top: auto;
@@ -599,15 +606,7 @@ html, body {
     border-width: 1px;
   }
 
-  /* Centrado verticalmente, o hint da direita caía por cima do conteúdo
-     dos painéis. Em mobile encosta ao canto, ao lado do botão voltar. */
-  .hint-right {
-    right: 5vw;
-    top: auto;
-    bottom: 3vh;
-  }
-
-  .hint-label, .hint-script {
+  .hint-label {
     font-size: 1.1rem;
   }
 }

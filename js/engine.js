@@ -273,47 +273,38 @@ function go(dir, byButton) {
   else                                        panTo(from, dest, tl);
 }
 
-// ── Hints ───────────────────────────────────────────────
-const hintDown  = document.getElementById('hint-down');
-const hintRight = document.getElementById('hint-right');
+// ── Hint ────────────────────────────────────────────────
+// Só existe o de descer, para os copos: a home sai por botões e o
+// painel "como obter" sai pelo botão voltar.
+const hintDown = document.getElementById('hint-down');
 let hintTweens = [];
 
 function hideHints() {
   hintTweens.forEach(t => t.kill());
   hintTweens = [];
-  [hintDown, hintRight].forEach(h => {
-    gsap.to(h, { opacity: 0, duration: 0.3 });
-    // Repõe o bounce a zero — sem isto o próximo hint arranca
-    // de onde o anterior foi interrompido
-    gsap.set(h, { x: 0, y: 0 });
-    h.style.pointerEvents = 'none';
-  });
+  gsap.to(hintDown, { opacity: 0, duration: 0.3 });
+  // Repõe o bounce a zero — sem isto o próximo hint arranca
+  // de onde o anterior foi interrompido
+  gsap.set(hintDown, { y: 0 });
+  hintDown.style.pointerEvents = 'none';
 }
 
 function showHints() {
-  const map = HINTS[current] || {};
-
-  showHint(hintDown, map.down, '.hint-label', { y: -10 });
-  showHint(hintRight, map.right, '.hint-script', { x: 10 });
-
+  const label = (HINTS[current] || {}).down;
   ready = true;
-}
-
-function showHint(el, label, labelSel, motion) {
   if (!label) return;
-  el.querySelector(labelSel).textContent = label;
-  el.style.pointerEvents = 'auto';
 
-  hintTweens.push(gsap.to(el, { opacity: 1, duration: 0.6, delay: 0.6 }));
-  hintTweens.push(gsap.to(el, Object.assign(
-    { duration: 0.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.6 }, motion)));
+  hintDown.querySelector('.hint-label').textContent = label;
+  hintDown.style.pointerEvents = 'auto';
+  hintTweens.push(gsap.to(hintDown, { opacity: 1, duration: 0.6, delay: 0.6 }));
+  hintTweens.push(gsap.to(hintDown, {
+    y: -10, duration: 0.8, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 0.6
+  }));
 }
 
-// O centramento dos hints é feito por xPercent/yPercent e não por
-// translate no CSS, para o GSAP poder animar y/x sem os reescrever.
-// Em mobile o hint da direita encosta ao fundo, sem centrar.
+// O centramento é feito por xPercent e não por translate no CSS,
+// para o GSAP poder animar y sem o reescrever.
 gsap.set(hintDown, { xPercent: -50 });
-if (isDesktop) gsap.set(hintRight, { yPercent: -50 });
 
 // ── Input ───────────────────────────────────────────────
 window.addEventListener('wheel', (e) => {
@@ -345,7 +336,6 @@ window.addEventListener('touchend', (e) => {
 }, { passive: true });
 
 hintDown.addEventListener('click', () => go('down', true));
-hintRight.addEventListener('click', () => go('right', true));
 document.getElementById('panel-back').addEventListener('click', () => go('left', true));
 
 // Botões da home
@@ -355,5 +345,11 @@ document.getElementById('action-obter').addEventListener('click', () => go('righ
 
 window.addEventListener('keydown', (e) => {
   const keys = { ArrowDown: 'down', ArrowUp: 'up', ArrowRight: 'right', ArrowLeft: 'left' };
-  if (keys[e.key]) { e.preventDefault(); go(keys[e.key], true); }
+  const dir = keys[e.key];
+  if (!dir) return;
+  // Sem destino, a tecla pertence ao scroll do conteúdo do painel —
+  // travá-la aqui deixava o FAQ inalcançável por teclado.
+  if (!(NAV[current] || {})[dir]) return;
+  e.preventDefault();
+  go(dir, true);
 });

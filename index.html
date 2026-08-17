@@ -46,65 +46,60 @@
   <!-- Os blocos são construídos por engine.js a partir de PRODUCTS -->
   <div id="products"></div>
 
-  <!-- ── Painel: COMO OBTER ─────────────────────────── -->
+  <!-- ── Painel: COMO OBTER ─────────────────────────────── -->
+  <!-- O FAQ vive dentro deste painel, em baixo: chega-se lá por scroll
+       normal do conteúdo, com o fundo quieto. Não é outro nó do grafo. -->
   <section class="panel" id="comoobter-panel" aria-label="Como obter">
-    <div class="panel-content">
+    <div class="panel-content" id="comoobter-scroll">
       <h2 class="panel-title rv">COMO OBTER</h2>
 
       <ol class="steps">
         <li class="step rv">
-          <span class="step-num">1</span>
-          <h3 class="step-title">Acumula pontos</h3>
-          <p class="step-body">Sempre que compras e te identificas com a App h3, acumulas pontos.</p>
+          <div class="step-card">
+            <h3 class="step-title">Acumula pontos</h3>
+            <p class="step-body">Sempre que compras e te identificas com a App h3, acumulas pontos.</p>
+          </div>
+          <span class="step-num" aria-hidden="true">1</span>
         </li>
         <li class="step rv">
-          <span class="step-num">2</span>
-          <h3 class="step-title">Troca num restaurante</h3>
-          <p class="step-body">Vais a qualquer restaurante h3 e trocas os teus pontos por copos.</p>
+          <div class="step-card">
+            <h3 class="step-title">Troca num restaurante</h3>
+            <p class="step-body">Em qualquer loja h3 trocas os teus pontos por copos.</p>
+            <p class="step-highlight">1 copo = 3 pontos</p>
+          </div>
+          <span class="step-num" aria-hidden="true">2</span>
         </li>
         <li class="step rv">
-          <span class="step-num">3</span>
-          <h3 class="step-title">Completa a coleção</h3>
-          <p class="step-body">Coleciona os 3 copos e completa esta coleção.</p>
+          <div class="step-card">
+            <h3 class="step-title">Completa a coleção</h3>
+            <p class="step-body">Coleciona os 3 copos e completa esta coleção.</p>
+            <p class="step-note">Tens até 30 de outubro de 2026 (ou final do stock) para colecionares os 3 copos.</p>
+          </div>
+          <span class="step-num" aria-hidden="true">3</span>
         </li>
       </ol>
 
-      <div class="pill panel-pill rv">1 copo = 3 pontos</div>
-      <p class="panel-note rv">De 8 de setembro a 30 de outubro de 2026, até ao fim do stock.</p>
-    </div>
-  </section>
-
-  <!-- ── Painel: FAQ ───────────────────────────────────── -->
-  <section class="panel" id="faq-panel" aria-label="Perguntas frequentes">
-    <div class="panel-content">
-      <h2 class="panel-title rv">PERGUNTAS<br>FREQUENTES</h2>
-
-      <div class="faq rv">
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Como acumulo pontos?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>Sempre que fizeres uma compra identificando-te com a tua App h3, acumulas pontos que podes trocar por recompensas exclusivas.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Quantos pontos preciso para obter um copo?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>Cada copo personalizado pode ser obtido através da troca de 3 pontos acumulados na App h3.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Onde posso trocar os meus pontos?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>A troca dos pontos é efetuada diretamente em qualquer restaurante h3, onde receberás o teu copo personalizado.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Posso escolher qualquer copo?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>Sim. No momento da troca, podes escolher qualquer um dos três modelos disponíveis, mediante disponibilidade de stock.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">Até quando decorre a campanha?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>A campanha decorre de 8 de setembro a 30 de outubro de 2026, ou até ao fim do stock existente.</p></div>
-        </div>
-        <div class="faq-item">
-          <button class="faq-q" aria-expanded="false">A campanha está sujeita ao stock existente?<span class="faq-icon" aria-hidden="true"></span></button>
-          <div class="faq-a"><p>Sim. Os copos são uma edição limitada e a campanha é válida apenas até ao fim do stock existente em cada restaurante.</p></div>
-        </div>
+      <div class="faq-cta rv">
+        <button class="pill pill-action" id="action-faq">perguntas frequentes</button>
       </div>
+
+      <section class="faq-section" id="faq-section" aria-label="Perguntas frequentes">
+        <h2 class="faq-title">PERGUNTAS FREQUENTES</h2>
+        <div class="faq">
+          <div class="faq-item">
+            <h3 class="faq-q">Posso escolher qualquer copo?</h3>
+            <p class="faq-a">Sim. No momento da troca, podes escolher qualquer um dos três modelos disponíveis, mediante disponibilidade de stock.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-q">Até quando decorre a campanha?</h3>
+            <p class="faq-a">A campanha decorre de 8 de setembro a 30 de outubro de 2026, ou até ao fim do stock existente.</p>
+          </div>
+          <div class="faq-item">
+            <h3 class="faq-q">Quem é a Teresa Rego?</h3>
+            <p class="faq-a">É a ilustradora dos copos. Formou-se em Arquitetura e, mais tarde, em Ilustração na University of the Arts London. Tem estúdio no Porto, e as suas ilustrações — coloridas, de formas ousadas e inspiradas na natureza — já vestiram marcas como a Prada e a Scotch&nbsp;&amp;&nbsp;Soda.</p>
+          </div>
+        </div>
+      </section>
     </div>
   </section>
 
@@ -128,14 +123,6 @@
       <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/>
       <path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/>
       <path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 16"/>
-    </svg>
-  </div>
-
-  <div class="hint hint-right" id="hint-right" aria-hidden="true">
-    <span class="hint-script">como obter</span>
-    <svg class="hint-arrow" width="24" height="20" viewBox="0 0 24 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M2 10C9 10 15 10 21 10" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M17 5.5L21.5 10L17 14.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
 

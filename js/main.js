@@ -2,34 +2,15 @@
 
 buildProducts();
 
-// ── FAQ: acordeão ───────────────────────────────────────
-// Uma resposta aberta de cada vez — a lista fechada cabe sempre
-// no ecrã, que é o que o formato sem scroll exige.
-function setupFaq() {
-  const items = document.querySelectorAll('.faq-item');
-
-  items.forEach(item => {
-    const q = item.querySelector('.faq-q');
-    const a = item.querySelector('.faq-a');
-
-    q.addEventListener('click', () => {
-      const isOpen = q.getAttribute('aria-expanded') === 'true';
-
-      items.forEach(other => {
-        if (other === item) return;
-        const oq = other.querySelector('.faq-q');
-        if (oq.getAttribute('aria-expanded') !== 'true') return;
-        oq.setAttribute('aria-expanded', 'false');
-        gsap.to(other.querySelector('.faq-a'), { height: 0, duration: 0.4, ease: 'power2.inOut' });
-      });
-
-      q.setAttribute('aria-expanded', String(!isOpen));
-      gsap.to(a, { height: isOpen ? 0 : 'auto', duration: 0.4, ease: 'power2.inOut' });
-    });
+// ── FAQ ─────────────────────────────────────────────────
+// O FAQ está sempre aberto e vive no fim do painel "como obter".
+// O botão leva-o à âncora com scroll do conteúdo, sem mudar de nó.
+document.getElementById('action-faq').addEventListener('click', () => {
+  document.getElementById('faq-section').scrollIntoView({
+    behavior: 'smooth',
+    block: 'start'
   });
-}
-
-setupFaq();
+});
 
 // ── Entrada ─────────────────────────────────────────────
 const introTl = gsap.timeline({

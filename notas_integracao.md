@@ -20,12 +20,16 @@ blocos de copo são gerados a partir de `PRODUCTS[]` — não há HTML repetido.
 O site não tem scroll. O estado é um nó do grafo `NAV` em `content.js`:
 
 ```
-                  hero ──right──▶ comoobter ──right──▶ faq
-                    │
-                  down
+                  hero ──right──▶ comoobter
+                    │                 ⋮  (scroll do conteúdo)
+                  down               FAQ
                     ▼
         limao ─▶ morango ─▶ maracuja ──down──▶ hero (fecha o ciclo)
 ```
+
+O **FAQ não é um nó do grafo**: vive no fim do painel "como obter" e chega-se
+lá por scroll normal do conteúdo, com o fundo quieto. O pill leva à âncora
+(`#faq-section`) e o botão voltar mantém-se fixo enquanto se rola.
 
 Cada movimento resolve-se em `go(direcção, porBotão)`. O tipo de transição é
 escolhido pelo tipo dos dois nós, não por índices:
@@ -42,9 +46,17 @@ teclado, clique nos hints, nos botões da home e no botão voltar.
 
 ### A home não navega por gesto
 
-`NO_GESTURE` (em `content.js`) lista os nós onde roda e swipe estão
-desligados. Só lá está o `hero`: dali partem três caminhos e um gesto não
-sabe qual deles o utilizador quer. Sai-se da home pelos três botões:
+`NO_GESTURE` (em `content.js`) lista os nós onde roda e swipe não navegam:
+
+- **`hero`** — dali partem três caminhos e um gesto não sabe qual deles o
+  utilizador quer. Sai-se pelos três botões.
+- **`comoobter`** — o gesto pertence ao scroll do conteúdo, não à navegação.
+  Sai-se pelo botão voltar.
+
+As teclas de seta só são interceptadas quando existe destino no grafo; caso
+contrário passam para o scroll do painel.
+
+Os três botões da home:
 
 | Botão | Destino |
 |---|---|
@@ -90,6 +102,30 @@ valores a afinar estão em `cupRest()` (`engine.js`).
 **Importante**: as três imagens têm de ter o copo enquadrado da mesma maneira.
 A transição entre copos assenta em as silhuetas coincidirem na linha do wipe —
 se uma das fotografias tiver o copo noutra posição, a passagem parte.
+
+## Números dos passos
+
+Os círculos ficam a cavalo na borda de cima do cartão. Para a linha não
+atravessar o algarismo, o cartão leva uma **máscara** (`radial-gradient`) que
+abre um buraco no sítio do círculo. Por isso o círculo é **irmão** do cartão e
+não filho — a máscara aplica-se também aos descendentes, e cortaria o número
+com ela.
+
+O tamanho é controlado por duas variáveis em `.step`: `--dia` (diâmetro do
+círculo) e `--ring` (folga entre o círculo e o corte). O buraco acompanha
+automaticamente.
+
+O algarismo leva `padding-top: 0.65em`: centrado só pela caixa ficava 0.33em
+acima do centro do círculo, porque não tem descendentes e a métrica da fonte
+reserva espaço em baixo que ele não usa.
+
+## Texto sobre a ilustradora
+
+A resposta "Quem é a Teresa Rego?" foi escrita a partir do site dela
+(teresaregostudio.com): formação em Arquitetura e depois Ilustração na
+University of the Arts London, estúdio no Porto, trabalho para marcas como
+Prada e Scotch & Soda. **Convém validar com o h3 e com a própria** antes de
+publicar — é texto sobre uma pessoa real.
 
 ## Cores
 
