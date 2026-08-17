@@ -256,7 +256,9 @@ html, body {
   height: 100dvh;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scroll-behavior: smooth;
+  /* Sem scroll-behavior: smooth — a curva nativa arranca de repente.
+     O salto para o FAQ é animado pelo GSAP, com a mesma curva das
+     transições do resto do site. */
   text-align: center;
   font-family: 'Josefin Sans', sans-serif;
   color: white;
@@ -308,7 +310,9 @@ html, body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  /* Ao topo: os títulos dos três cartões ficam à mesma altura, mesmo
+     com quantidades de texto diferentes. */
+  justify-content: flex-start;
   border: 2px solid white;
   border-radius: 16px;
   padding: calc(var(--dia) / 2 + 1.6em) 1.8em 2em;
@@ -358,9 +362,10 @@ html, body {
   line-height: 1.6;
 }
 
-/* Destaque, no cartão do meio */
+/* Destaque, no cartão do meio.
+   align-self impede que o flex do cartão o estique à largura toda. */
 .step-highlight {
-  display: inline-block;
+  align-self: center;
   margin-top: 1.2em;
   padding: 0.55em 1.3em;
   border-radius: 100px;
@@ -378,11 +383,21 @@ html, body {
   margin-top: 2.4em;
 }
 
+/* Só contorno: é navegação dentro da página, não uma acção como as
+   pílulas da home. */
+.pill-outline {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+}
+
 /* ── FAQ ─────────────────────────────────────────────── */
 /* Vive no fim do painel "Como obter", alcançado por scroll do
-   conteúdo. O fundo não se mexe. */
+   conteúdo. O fundo não se mexe.
+   A largura é a mesma dos cartões, não a da janela. */
 .faq-section {
-  margin-top: 14vh;
+  max-width: 78vw;
+  margin: 14vh auto 0;
   padding-bottom: 6vh;
   scroll-margin-top: 2vh;
 }
@@ -592,7 +607,8 @@ html, body {
     padding: calc(var(--dia) / 2 + 1em) 1.2em 1.6em;
   }
 
-  .step-num   { font-size: 4.6vw; border-width: 1px; }
+  .step-num    { font-size: 4.6vw; border-width: 1px; }
+  .pill-outline { border-width: 1px; }
   .step-title { font-size: 5vw; }
   .step-body  { font-size: 3.6vw; }
 
