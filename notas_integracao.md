@@ -31,6 +31,12 @@ O **FAQ não é um nó do grafo**: vive no fim do painel "como obter" e chega-se
 lá por scroll normal do conteúdo, com o fundo quieto. O pill leva à âncora
 (`#faq-section`) e o botão voltar mantém-se fixo enquanto se rola.
 
+O painel divide-se em dois: `.panel-screen` ocupa exactamente uma janela
+(`min-height: 100%`) com o bloco centrado, e o FAQ vem a seguir — é isto que
+o mantém abaixo da dobra. O contentor que rola (`.panel-content`) ocupa a
+largura toda para o elevador ficar na margem do ecrã e não na do texto; a
+largura de leitura é imposta pelos filhos.
+
 Cada movimento resolve-se em `go(direcção, porBotão)`. O tipo de transição é
 escolhido pelo tipo dos dois nós, não por índices:
 
@@ -111,13 +117,15 @@ abre um buraco no sítio do círculo. Por isso o círculo é **irmão** do cart�
 não filho — a máscara aplica-se também aos descendentes, e cortaria o número
 com ela.
 
-O tamanho é controlado por duas variáveis em `.step`: `--dia` (diâmetro do
-círculo) e `--ring` (folga entre o círculo e o corte). O buraco acompanha
-automaticamente.
+O tamanho é controlado por `--dia` em `.step` (diâmetro do círculo). O buraco
+tem exactamente esse raio, para as duas linhas se encontrarem sem folga.
 
-O algarismo leva `padding-top: 0.65em`: centrado só pela caixa ficava 0.33em
-acima do centro do círculo, porque não tem descendentes e a métrica da fonte
-reserva espaço em baixo que ele não usa.
+O algarismo leva `padding-top: 0.13em`. Centrado só pela caixa fica alto,
+porque não tem descendentes e a métrica da fonte reserva espaço em baixo que
+ele não usa. Com `align-items: center`, o padding desloca **metade** do seu
+valor. O valor foi aferido por leitura de pixels do ecrã, não por métricas da
+fonte — a posição da mancha quantiza ao pixel, por isso o melhor possível é
+ficar dentro de ±0.5px do centro.
 
 ## Texto sobre a ilustradora
 
