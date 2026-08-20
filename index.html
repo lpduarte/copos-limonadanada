@@ -28,6 +28,14 @@
     <img class="hero-img" src="img/3_copos.webp" alt="Os três copos colecionáveis h3">
   </div>
 
+  <!-- ── Hero: ilustrações de Teresa Rego nas bordas ───── -->
+  <!-- Dois sabores diferentes, um em cima e outro em baixo. Camada à
+       parte da fotografia: no eixo horizontal desliza a meia velocidade. -->
+  <div class="hero-art" id="hero-art">
+    <div class="art art-top"><img src="img/ilustracoes/morango.svg" alt="" aria-hidden="true"></div>
+    <div class="art art-bottom"><img src="img/ilustracoes/limao.svg" alt="" aria-hidden="true"></div>
+  </div>
+
   <!-- Escurecimento para leitura sobre a imagem (eixo horizontal) -->
   <div class="scrim" id="scrim"></div>
 
@@ -35,12 +43,25 @@
   <div class="hero-text" id="hero-text">
     <div class="hero-inner">
       <div class="hero-kicker rv">QUERES FICAR COM OS</div>
-      <div class="hero-title rv">COPOS</div>
+      <div class="hero-title rv">COPOS?</div>
       <div class="hero-sub rv">Coleção exclusiva e limitada, ilustrada pela artista Teresa Rego</div>
       <div class="hero-actions rv">
-        <button class="pill pill-action" id="action-copos">conhece os copos</button>
-        <button class="pill pill-action" id="action-obter">como obter</button>
-        <button class="pill pill-action" id="action-limonadas">conhece as limonadas</button>
+        <!-- A seta diz para onde se vai: para baixo o eixo dos copos, para a
+             direita o eixo da informação, para fora quando sai do site. -->
+        <button class="pill pill-action pill-nav" id="action-copos" data-dir="down"><span class="rotulo">conhece os copos</span>
+          <span class="disco" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>
+            </svg>
+          </span>
+        </button>
+        <button class="pill pill-action pill-nav" id="action-obter" data-dir="right"><span class="rotulo">como obter</span>
+          <span class="disco" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </span>
+        </button>
       </div>
     </div>
   </div>
@@ -85,7 +106,13 @@
       </ol>
 
       <div class="faq-cta rv">
-        <button class="pill pill-action pill-outline" id="action-faq">perguntas frequentes</button>
+        <button class="pill pill-action pill-nav" id="action-faq" data-dir="down"><span class="rotulo">Queres saber mais?</span>
+          <span class="disco" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>
+            </svg>
+          </span>
+        </button>
       </div>
       </div><!-- /panel-screen -->
 
@@ -119,11 +146,11 @@
   <!-- ── Hints de navegação ────────────────────────────── -->
   <div class="hint hint-down" id="hint-down" aria-hidden="true">
     <span class="hint-label">conhece os copos</span>
-    <svg class="hint-mouse" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="hint-mouse" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <rect x="5" y="2" width="14" height="20" rx="7"/>
       <path d="M12 6v4"/>
     </svg>
-    <svg class="hint-pointer" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="hint-pointer" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
       <path d="M22 14a8 8 0 0 1-8 8"/>
       <path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/>
       <path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/>

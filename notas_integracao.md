@@ -9,6 +9,7 @@ js/content.js       conteúdo e configuração — é aqui que se mexe
 js/engine.js        motor de navegação, transições
 js/main.js          arranque, acordeão da FAQ
 img/
+img/ilustracoes/    as três bandas .svg de Teresa Rego
 ```
 
 A separação é intencional: **`content.js` é o único ficheiro que precisa de ser
@@ -28,8 +29,14 @@ O site não tem scroll. O estado é um nó do grafo `NAV` em `content.js`:
 ```
 
 O **FAQ não é um nó do grafo**: vive no fim do painel "como obter" e chega-se
-lá por scroll normal do conteúdo, com o fundo quieto. O pill leva à âncora
-(`#faq-section`) e o botão voltar mantém-se fixo enquanto se rola.
+lá por scroll normal do conteúdo, com o fundo quieto. O botão "Saber mais? Lê o
+FAQ" leva à âncora (`#faq-section`) e o botão voltar mantém-se fixo enquanto se
+rola.
+
+Esse botão leva o mesmo tratamento dos da home (`.pill-nav`, disco com seta a
+apontar para baixo, que é para onde o conteúdo rola). Era antes uma pílula só de
+contorno, para se distinguir das acções da home; o h3 preferiu igualar, e a
+classe `.pill-outline` foi removida por já não ter uso.
 
 O painel divide-se em dois: `.panel-screen` ocupa exactamente uma janela
 (`min-height: 100%`) com o bloco centrado, e o FAQ vem a seguir — é isto que
@@ -54,21 +61,77 @@ teclado, clique nos hints, nos botões da home e no botão voltar.
 
 `NO_GESTURE` (em `content.js`) lista os nós onde roda e swipe não navegam:
 
-- **`hero`** — dali partem três caminhos e um gesto não sabe qual deles o
-  utilizador quer. Sai-se pelos três botões.
+- **`hero`** — dali partem dois caminhos, um por eixo, e um gesto não sabe qual
+  deles o utilizador quer. Sai-se pelos botões.
 - **`comoobter`** — o gesto pertence ao scroll do conteúdo, não à navegação.
   Sai-se pelo botão voltar.
 
 As teclas de seta só são interceptadas quando existe destino no grafo; caso
 contrário passam para o scroll do painel.
 
-Os três botões da home:
+Os dois botões da home:
 
-| Botão | Destino |
-|---|---|
-| conhece os copos | eixo vertical, para o copo de limão |
-| como obter | eixo horizontal, para o painel da mecânica |
-| **conhece as limonadas** | **por ligar** — ver secção seguinte |
+| Botão | Seta | Destino |
+|---|---|---|
+| conhece os copos | para baixo | eixo vertical, para o copo de limão |
+| como obter | para a direita | eixo horizontal, para o painel da mecânica |
+
+Houve um terceiro, "conhece as limonadas", que remetia para a landing page das
+LimonadaNada — o h3 decidiu tirá-lo. Foi removido com o ícone de "abre fora do
+site" que o acompanhava; se voltar, o desenho é o `square-arrow-out-up-right`
+do lucide e o destino tem de abrir noutro separador.
+
+O h3 achava que estes botões não pareciam botões, e a razão era concreta: a pílula
+branca é também o elemento de **informação** do site ("1 copo = 3 pontos" nos
+copos, o destaque no painel). O mesmo objecto a dizer "isto é um facto" e
+"carrega aqui". O que os separa agora é o disco com a seta — e a seta aponta
+para onde a página vai mesmo, o que faz dela navegação e não ornamento.
+
+O desenho da seta é o do botão de voltar do painel (traço de 1,5, pontas
+redondas).
+
+No hover o botão **não sobe**: o disco esvazia-se para contorno azul, a seta passa a
+azul e avança 3px na direcção que anuncia — o mesmo gesto do botão de voltar. O
+contorno já existe no estado cheio, com a mesma espessura, para o disco não
+mudar de medida ao passar de um estado para o outro.
+
+O azul sai de `currentColor`, herdado do `.pill-action`: a cor continua a
+viver num sítio só.
+
+Três detalhes de medida, todos aferidos por leitura de píxeis:
+
+- **O rótulo tem elemento próprio** (`.rotulo`) com uma correcção óptica em
+  `--optico`, aplicada por `translateY` — em translate e não em padding, para
+  poder corrigir nos dois sentidos. **O valor depende do que está escrito**, e
+  não há um número que sirva os dois casos:
+
+  | rótulo | o que o olho equilibra | `--optico` |
+  |---|---|---|
+  | minúsculas ("conhece os copos") | entre a x-height e as ascendentes | `-0.08em` (sobe) |
+  | com maiúsculas ("Saber mais? Lê o FAQ") | a altura das maiúsculas | `0.085em` (desce) |
+
+  Para medir isto, contas com o *bounding box* do texto enganam: a cauda do Q
+  conta para a caixa e não conta para o olho, e o rect de um `<span>` não é a
+  caixa de linha. O que funciona é marcar a linha de base com um
+  `inline-block` de altura zero (`vertical-align: baseline`), tirar a
+  cap-height e a x-height de `measureText` num canvas, e comparar o meio dessa
+  faixa com o meio da cápsula.
+
+  Nota: os `<button>` levam `line-height: normal` do próprio browser, que
+  ganha à herança — por isso os dois botões estão no mesmo contexto, mesmo
+  vivendo em zonas do site com line-heights diferentes.
+- **O disco é concêntrico com a cápsula.** O `padding-right` de 0,42em é
+  exactamente a diferença entre o raio da cápsula (1,47em) e o do disco
+  (1,05em), por isso a folga é igual em cima, em baixo e à direita — 9,4px a
+  1440. Mexer no padding vertical obriga a mexer no direito pelo mesmo valor.
+- **A seta de sair do site não se move** no hover: o ícone já aponta para fora
+  e o deslocamento diagonal lia-se como tremor.
+
+**Armadilha de cascata**: `.pill-nav` e `.pill` têm a mesma especificidade, por
+isso o bloco dos botões da home **tem de vir depois de `.pill`** no ficheiro.
+Estava antes, e o botão herdava o `padding: 0.6em 1.5em` da pílula genérica —
+o disco ficava a 30px da margem direita contra 12px em cima e em baixo, e o
+`font-size` não pegava.
 
 ### Posição do copo entre blocos
 
@@ -83,31 +146,171 @@ centro). Alterar isto é mexer nas condições `fromHero` / `toHero` em
 
 ## O que falta antes de publicar
 
-- **Botão "conhece as limonadas"** (`#action-limonadas`) — está sem acção por
-  decisão. É o CTA que o briefing pede para remeter à landing page das
-  LimonadaNada; falta o URL de destino. Ligar em `engine.js`, junto dos outros
-  dois botões da home.
 - **`og:url`** — falta em `index.html`. Adicionar com o URL final.
 - **Imagens OG/Twitter** — os caminhos são relativos (`img/3_copos.webp`).
   Passar a absolutos no deploy final.
-- **Imagens dos copos** — as quatro `.webp` em `img/` são ainda as limonadas da
-  1ª vaga, usadas como placeholder. Ver secção seguinte.
 
 ## Imagens
 
-As imagens de produto são 6825×2880 (~2.37:1). O posicionamento do copo
-depende desta proporção:
+As quatro fotografias em `img/` são as da 2ª entrega: os copos verdadeiros, com
+a ilustração já impressa. Chegaram em JPG (~10 MB cada) e foram convertidas para
+WebP com qualidade 80:
+
+```
+npx sharp-cli -i original.jpg -o img/ -f webp -q 80
+```
+
+Ficam em 346–476 KB, na mesma ordem de grandeza das anteriores. A 80 não há
+banding visível no degradé do fundo — a 75 já aparecem blocos. Os originais são
+sRGB e o WebP sai sem perfil embutido, que é o que os browsers assumem: as cores
+não se deslocam.
+
+São 6825×2880 (~2,37:1) e o posicionamento do copo depende dessa proporção:
 
 - **Desktop**: o copo desloca-se `15vw` para a direita (limitado à margem da
   imagem por `cupOffset()`), sobe `5vh` e escala 1.28.
 - **Mobile**: escala 1.3 com `transform-origin: top 48%`.
 
-Ao trocar pelas imagens finais dos copos, manter a proporção. Se mudar, os
-valores a afinar estão em `cupRest()` (`engine.js`).
+Ao trocar por novas fotografias, manter a proporção. Se mudar, os valores a
+afinar estão em `cupRest()` (`engine.js`).
 
-**Importante**: as três imagens têm de ter o copo enquadrado da mesma maneira.
-A transição entre copos assenta em as silhuetas coincidirem na linha do wipe —
-se uma das fotografias tiver o copo noutra posição, a passagem parte.
+**Importante**: as três imagens têm de ter o copo enquadrado da mesma maneira. A
+transição entre copos assenta em as silhuetas coincidirem na linha do wipe — se
+uma das fotografias tiver o copo noutra posição, a passagem parte. Nesta entrega
+as posições não coincidem ao pixel (foram aproximadas em Photoshop) e ficou
+assim por decisão: não se mexeu em `cupRest()` para compensar.
+
+### As cores dos fundos
+
+A 3ª entrega das fotografias trouxe os fundos certos: um por sabor. (A entrega
+anterior tinha vindo toda em azul, por um mal-entendido no briefing ao
+pós-produtor — houve um interruptor no código para lidar com isso, entretanto
+removido.)
+
+Os valores em `COLORS` **são medidos nas fotografias**, não escolhidos: média
+de nove pontos do fundo, fora do copo e da sombra. O fundo do ecrã tem de
+continuar a fotografia onde ela não chega, e qualquer desvio aparece na
+transição.
+
+| | fundo |
+|---|---|
+| hero | `#08a3e9` |
+| limão | `#deb82f` |
+| morango | `#d44947` |
+| maracujá | `#742d8b` |
+
+Ao trocar as fotografias, **voltar a medir**. O método está em
+`scratchpad/`: desenhar amostras de 1px num canvas e ler o `getImageData`.
+
+### Duas tintas por copo
+
+São dois problemas de contraste diferentes, por isso são dois campos em
+`PRODUCTS`:
+
+| | `tinta` (texto sobre o fundo) | `corPilula` (texto sobre branco) |
+|---|---|---|
+| limão | azul de marca | azul de marca |
+| morango | branco | o vermelho do fundo |
+| maracujá | branco | o roxo do fundo |
+
+**O limão é o caso especial**: o amarelo é claro, o texto branco desaparecia
+nele e a pílula branca com texto amarelo era ilegível. Ambos passam ao azul de
+marca (`COLORS.marca`, `#0a5eb5`) — que é tinta e não fundo, e por isso é
+também o único azul que vive no CSS, junto de `.pill-action`.
+
+Duas coisas seguem a tinta e é preciso lembrar-se delas ao mexer nas cores:
+
+- **O hint de navegação** ("copo seguinte") vive fora das camadas dos copos, por
+  isso não herda nada — o engine acerta-lhe a cor em `showHints()`. Sobre o
+  amarelo, um hint branco desaparecia.
+- **O halo do texto em mobile.** Aí o corpo de texto cai por cima do copo e é a
+  sombra que o separa; ela tem de ser o **contrário** da tinta — escura por
+  baixo de texto branco, clara por baixo de texto escuro. Vem do engine em
+  `--halo`, porque depende da tinta.
+
+**Nota em aberto**: mesmo com o halo, o corpo de texto do limão em mobile
+assenta sobre a zona clara e multicolor do copo e lê-se com esforço. Com a copy
+definitiva (mais curta que o lorem ipsum) talvez deixe de ser problema; se não
+for, a decisão é de desenho e não de cor.
+
+## Ilustrações de Teresa Rego
+
+As três bandas em `img/ilustracoes/` são ficheiros **originais, por tocar** —
+não passaram por optimizador. Comprimidas pelo servidor ficam em 41–90 KB, menos
+do que qualquer uma das fotografias (346–548 KB), por isso não compensava o risco
+de as mexer. O `svgo` com `convertPathData` ligado, já agora, rebenta nestes
+paths.
+
+Cada peça tem ~2,2:1 e as **quatro margens cortadas a direito**. Daí a regra que
+governa toda a composição: **a arte só pode ser cortada pelas bordas do ecrã**.
+Qualquer recorte nosso dentro do ecrã — uma caixa num canto, uma faixa de altura
+fixa — deixa uma aresta recta à vista e lê-se como banner colado. Quem faz a
+fronteira com o centro do ecrã é a silhueta irregular da própria ilustração; as
+laterais saem sempre para fora.
+
+Também não emendam nas pontas (testado): são peças fechadas, não padrões — não
+se pode repetir uma em mosaico ao longo do ecrã.
+
+### Como se compõe
+
+Uma peça em cima e outra em baixo, controladas por três variáveis em `.art`
+(`styles.css`):
+
+| | o que é |
+|---|---|
+| `--zoom` | largura da peça, em % da largura do ecrã. Acima de 100 — as laterais têm de sair |
+| `--entra` | quanto dela entra no ecrã, em % da altura **dela**. Medir na peça e não na janela mantém a conta independente do formato do ecrã |
+| `--fx` | que zona da banda fica visível: 0 esquerda, 1 direita |
+
+Valores por contexto:
+
+| | topo | rodapé |
+|---|---|---|
+| hero (desktop) | 150 / 11 / 0,08 | 175 / 13 / 0,92 |
+| copos (desktop) | 200 / 13 / 0 | 210 / 15 / 1 |
+| hero (mobile) | 290 / 13 | 320 / 15 |
+| copos (mobile) | 330 / 13 | 360 / 20 |
+
+No hero são **duas peças diferentes** (morango em cima, limão em baixo — o
+maracujá não entra). Nos copos é a **mesma peça nos dois sítios**, e é por isso
+que ali a ampliação é maior: a `--zoom` do hero, as duas janelas apanhavam a
+mesma zona da banda e as formas repetiam-se à vista. A 200%/210% vê-se pouco
+mais de metade da banda de cada vez — a metade esquerda em cima, a direita em
+baixo, sem sobreposição.
+
+Em retrato a peça é muito mais alta em relação ao ecrã, por isso a ampliação
+sobe. **Atenção à cascata**: as regras dos copos são `.product-layer .art-top`
+e ganham por especificidade à media query de mobile — o bloco mobile tem de
+repetir o mesmo selector, senão os copos ficam nos valores de desktop.
+
+### Onde vive cada coisa
+
+O ficheiro de cada sabor é dado do produto (`PRODUCTS[].art`, em
+`content.js`) e o engine constrói as duas peças dentro da camada do copo — o
+mesmo `clip-path` do wipe leva a ilustração com ele. As do hero estão no
+`index.html`, numa camada à parte (`#hero-art`) porque têm movimento próprio:
+**pertencem ao hero e saem com ele**. Ao passar para o painel, a peça de cima
+sobe e a de baixo desce até saírem de vista (`yPercent` ∓20 — um pouco mais do
+que o `--entra`, por isso vale em qualquer formato de ecrã); ao voltar, entram
+outra vez. O painel é texto denso e não as quer por trás.
+
+Cada peça tem **dois elementos**: o `div.art` é do movimento (é nele que o
+GSAP escreve o transform) e o `img` lá dentro é da composição. Com tudo no
+mesmo elemento, a primeira animação apagava o enquadramento — e ele deixava de
+responder ao redimensionar a janela.
+
+### Contraste
+
+Cada peça assenta agora sobre o fundo da sua própria cor, e o caso difícil é o
+**limão**: as formas amarelas da ilustração perdem-se contra o fundo amarelo e o
+que sustenta a peça são os azuis e os vermelhos. Aguenta-se, mas se incomodar a
+saída é baixar o `--entra` desse ecrã — não trocar as peças de sítio, que cada
+copo mostra a sua.
+
+Nota do que mudou com estas fotografias: a ilustração das bordas passou a ser a
+mesma arte que está impressa no copo, ampliada. Lê-se como coerência e não como
+repetição, mas é uma relação nova — vale a pena olhar para isso quando entrar a
+copy definitiva.
 
 ## Números dos passos
 
@@ -137,9 +340,14 @@ publicar — é texto sobre uma pessoa real.
 
 ## Cores
 
-Vivem só em `COLORS` (`js/content.js`). O fundo de cada bloco e a cor do texto
-da pílula são aplicados por JS a partir de `PRODUCTS[].color` — não há cores de
-produto no CSS.
+Vivem só em `COLORS` (`js/content.js`): os fundos (medidos nas fotografias) e o
+azul de marca. O fundo de cada bloco, a tinta do texto e a cor do texto da
+pílula são aplicados por JS a partir de `PRODUCTS[]` — não há cores de produto
+no CSS. Ver **As cores dos fundos** e **Duas tintas por copo**.
+
+Há duas excepções, ambas de tinta e não de fundo: o azul de marca nos botões
+(`.pill-action { color: #0a5eb5 }`, de onde `currentColor` o leva ao disco da
+seta) e o mesmo azul no destaque "1 copo = 3 pontos" do painel.
 
 ## Datas
 

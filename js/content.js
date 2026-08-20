@@ -3,11 +3,19 @@
 // como dados e são construídos pelo engine. Os painéis do eixo horizontal
 // (como obter, FAQ) são únicos e estão escritos no index.html.
 
+// Os fundos são os das fotografias, medidos nelas (média de nove pontos, fora
+// do copo e da sombra): o fundo do ecrã tem de continuar a fotografia onde ela
+// não chega, e nota-se na transição se destoar.
+//
+// O azul de marca — #0a5eb5, o dos botões — NÃO está aqui: é tinta e não
+// fundo, vive no CSS junto de `.pill-action`. `base` é o azul da fotografia
+// do hero, que é outro.
 const COLORS = {
-  base:     '#0a5eb5',
-  limao:    '#e8b000',
-  morango:  '#d94452',
-  maracuja: '#6b2fa0'
+  base:     '#08a3e9',
+  limao:    '#deb82f',
+  morango:  '#d44947',
+  maracuja: '#742d8b',
+  marca:    '#0a5eb5'
 };
 
 // NOTA: os campos `post` e `body` são placeholders neutros, à espera da
@@ -17,7 +25,12 @@ const PRODUCTS = [
     id: 'limao',
     name: 'LIMÃO',
     color: COLORS.limao,
+    // O amarelo é claro: o texto branco desaparecia nele, e a pílula
+    // branca com texto amarelo era ilegível. Ambos passam ao azul de marca.
+    tinta: COLORS.marca,
+    corPilula: COLORS.marca,
     img: 'img/limao.webp',
+    art: 'img/ilustracoes/limao.svg',
     alt: 'Copo h3 LimonadaNada de Limão',
     pre: 'O COPO',
     post: 'LOREM IPSUM DOLOR',
@@ -28,7 +41,10 @@ const PRODUCTS = [
     id: 'morango',
     name: 'MORANGO',
     color: COLORS.morango,
+    tinta: '#ffffff',
+    corPilula: COLORS.morango,
     img: 'img/morango.webp',
+    art: 'img/ilustracoes/morango.svg',
     alt: 'Copo h3 LimonadaNada de Morango',
     pre: 'O COPO',
     post: 'LOREM IPSUM DOLOR',
@@ -39,7 +55,10 @@ const PRODUCTS = [
     id: 'maracuja',
     name: 'MARACUJÁ',
     color: COLORS.maracuja,
+    tinta: '#ffffff',
+    corPilula: COLORS.maracuja,
     img: 'img/maracuja.webp',
+    art: 'img/ilustracoes/maracuja.svg',
     alt: 'Copo h3 LimonadaNada de Maracujá',
     pre: 'O COPO',
     post: 'LOREM IPSUM DOLOR',
@@ -75,7 +94,7 @@ const PANELS = ['comoobter'];
 
 // Texto dos hints de navegação, por nó e direcção.
 // Uma direcção sem texto não mostra hint (mas continua navegável).
-// A home não tem hints: sai-se de lá pelos três botões.
+// A home não tem hints: sai-se de lá pelos botões.
 const HINTS = {
   hero:      {},
   limao:     { down: 'copo seguinte' },
@@ -85,6 +104,6 @@ const HINTS = {
 };
 
 // Nós onde a navegação por gesto está desligada.
-//   hero      — dali partem três caminhos e o gesto não sabe qual
+//   hero      — dali partem dois caminhos e o gesto não sabe qual
 //   comoobter — o gesto pertence ao scroll do conteúdo, não à navegação
 const NO_GESTURE = ['hero', 'comoobter'];

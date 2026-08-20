@@ -33,6 +33,12 @@ const introTl = gsap.timeline({
   onComplete: showHints
 });
 
+// As ilustrações chegam do bordo antes do texto: primeiro monta-se o
+// cenário, depois entra a mensagem. Deslocam-se em percentagem da própria
+// peça, por isso o valor vale em qualquer ecrã.
+introTl.from('#hero-art .art-top',    { yPercent: -18, opacity: 0, duration: 1.6, ease: EASE_MOVE }, 0)
+       .from('#hero-art .art-bottom', { yPercent:  18, opacity: 0, duration: 1.6, ease: EASE_MOVE }, 0.12);
+
 revealIn(document.getElementById('hero-text'), introTl, 0);
 
 // O deslocamento do copo é calculado a partir da largura da imagem e da
@@ -40,5 +46,5 @@ revealIn(document.getElementById('hero-text'), introTl, 0);
 window.addEventListener('resize', () => {
   if (busy) return;
   const p = productOf(current);
-  if (p) gsap.set('#' + p.id + '-layer img', cupRest());
+  if (p) gsap.set('#' + p.id + '-layer .cup-photo', cupRest());
 });

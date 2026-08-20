@@ -36,19 +36,34 @@ function buildProducts() {
     layer.id = p.id + '-layer';
     layer.style.zIndex = 15 + i;
     layer.style.background = p.color;
-    layer.innerHTML = '<img src="' + p.img + '" alt="' + p.alt + '">';
+    // A fotografia e, nas bordas, a ilustração do sabor: a mesma peça em
+    // cima e em baixo, mas em zonas opostas da banda (ver .art no CSS).
+    layer.innerHTML =
+      '<img class="cup-photo" src="' + p.img + '" alt="' + p.alt + '">' +
+      '<div class="art art-top"><img src="' + p.art + '" alt="" aria-hidden="true"></div>' +
+      '<div class="art art-bottom"><img src="' + p.art + '" alt="" aria-hidden="true"></div>';
     host.appendChild(layer);
 
     const text = document.createElement('div');
     text.className = 'product-text-layer';
     text.id = p.id + '-text';
+    // Duas tintas: o texto grande assenta sobre o fundo colorido, a pílula
+    // sobre branco. No limão são a mesma — ver a nota em content.js.
+    //
+    // O halo serve para separar o texto do copo em mobile, onde lhe cai por
+    // cima. Tem de ser o contrário da tinta: escuro por baixo de texto
+    // branco, claro por baixo de texto escuro.
+    const halo = p.tinta === '#ffffff'
+      ? 'rgba(0, 0, 0, 0.55)'
+      : 'rgba(255, 255, 255, 0.9)';
+
     text.innerHTML =
-      '<div class="product-text-wrapper">' +
+      '<div class="product-text-wrapper" style="color:' + p.tinta + '; --halo:' + halo + '">' +
         '<div class="product-pre rv">' + p.pre + '</div>' +
         '<div class="product-name rv">' + p.name + '</div>' +
         '<div class="product-post rv">' + p.post + '</div>' +
         '<div class="product-body rv">' + p.body + '</div>' +
-        '<div class="pill product-pill rv" style="color:' + p.color + '">' + p.pill + '</div>' +
+        '<div class="pill product-pill rv" style="color:' + p.corPilula + '">' + p.pill + '</div>' +
       '</div>';
     host.appendChild(text);
   });
@@ -59,7 +74,7 @@ function buildProducts() {
 // em mobile cresce e o texto empilha por cima.
 function cupOffset() {
   if (!isDesktop) return 0;
-  const img = document.querySelector('.product-layer img');
+  const img = document.querySelector('.product-layer .cup-photo');
   if (!img) return 0;
   const maxSafe = (img.offsetWidth - window.innerWidth) / 2;
   return Math.max(0, Math.min(window.innerWidth * 0.15, maxSafe));
@@ -104,7 +119,7 @@ function revealOut(scope, tl, at) {
 function enterProduct(fromId, toId, tl) {
   const p = productOf(toId);
   const layer = '#' + toId + '-layer';
-  const imgEl = layer + ' img';
+  const imgEl = layer + ' .cup-photo';
   const fromHero = fromId === 'hero';
 
   gsap.set(layer, { clipPath: CLIP_HIDDEN_BOTTOM });
@@ -135,7 +150,7 @@ function enterProduct(fromId, toId, tl) {
 // ── Transição: sair de um copo (subir) ──────────────────
 function leaveProduct(fromId, toId, tl) {
   const layer = '#' + fromId + '-layer';
-  const imgEl = layer + ' img';
+  const imgEl = layer + ' .cup-photo';
   const toHero = toId === 'hero';
   const backColor = toHero ? COLORS.base : productOf(toId).color;
 
@@ -163,7 +178,7 @@ function leaveProduct(fromId, toId, tl) {
 // como regresso e não como mais um copo.
 function loopToHero(fromId, tl) {
   const layer = '#' + fromId + '-layer';
-  const imgEl = layer + ' img';
+  const imgEl = layer + ' .cup-photo';
 
   // Os copos anteriores continuavam revelados por baixo deste. Ao
   // levantar o wipe apareciam de lado antes do reset — o salto.
@@ -190,7 +205,7 @@ function loopToHero(fromId, tl) {
     // visíveis, e apareceriam por cima do hero.
     PRODUCTS.forEach(p => {
       gsap.set('#' + p.id + '-layer', { clipPath: CLIP_HIDDEN_BOTTOM });
-      gsap.set('#' + p.id + '-layer img', cupHome());
+      gsap.set('#' + p.id + '-layer .cup-photo', cupHome());
       gsap.set('#' + p.id + '-text', { opacity: 1 });
       gsap.set('#' + p.id + '-text .rv', { opacity: 0 });
     });
@@ -207,6 +222,15 @@ function panTo(fromId, toId, tl) {
 
   // A imagem desliza e recua para segundo plano: os painéis são texto
   // denso e não competem bem com os copos nítidos por trás.
+  // As ilustrações pertencem ao hero: quando se sai dele, recolhem pelas
+  // bordas por onde entraram e saem de vista — o painel é texto denso e
+  // não as quer por trás. Ao voltar, entram outra vez.
+  // O deslocamento é em percentagem da própria peça, um pouco acima do
+  // que está dentro do ecrã (--entra), por isso vale em qualquer formato.
+  const recolhe = toIdx > 0;
+  tl.to('#hero-art .art-top',    { yPercent: recolhe ? -20 : 0, duration: D, ease: EASE_MOVE }, 0)
+    .to('#hero-art .art-bottom', { yPercent: recolhe ?  20 : 0, duration: D, ease: EASE_MOVE }, 0);
+
   tl.to('.hero-img', { x: -step * toIdx, duration: D, ease: EASE_MOVE }, 0)
     .to('.hero-img', { filter: toIdx > 0 ? 'blur(14px)' : 'blur(0px)', duration: D, ease: EASE_MOVE }, 0)
     .to('#scrim', { opacity: toIdx > 0 ? 1 : 0, duration: D, ease: EASE_MOVE }, 0);
@@ -294,6 +318,11 @@ function showHints() {
   ready = true;
   if (!label) return;
 
+  // O hint vive fora das camadas, por isso não herda a tinta do ecrã —
+  // tem de a receber. Sobre o amarelo do limão, o branco desaparecia.
+  const p = productOf(current);
+  hintDown.style.color = p ? p.tinta : 'white';
+
   hintDown.querySelector('.hint-label').textContent = label;
   hintDown.style.pointerEvents = 'auto';
   hintTweens.push(gsap.to(hintDown, { opacity: 1, duration: 0.6, delay: 0.6 }));
@@ -341,7 +370,6 @@ document.getElementById('panel-back').addEventListener('click', () => go('left',
 // Botões da home
 document.getElementById('action-copos').addEventListener('click', () => go('down', true));
 document.getElementById('action-obter').addEventListener('click', () => go('right', true));
-// "conhece as limonadas" ainda não liga a lado nenhum — ver notas
 
 window.addEventListener('keydown', (e) => {
   const keys = { ArrowDown: 'down', ArrowUp: 'up', ArrowRight: 'right', ArrowLeft: 'left' };

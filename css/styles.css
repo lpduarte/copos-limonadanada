@@ -7,7 +7,9 @@
 html, body {
   overflow: hidden;
   height: 100vh;
-  background: #0a5eb5;
+  /* O azul da fotografia do hero, para o arranque não piscar noutra cor.
+     É outro azul que o de marca dos botões — ver COLORS em content.js. */
+  background: #08a3e9;
   touch-action: manipulation;
   /* O eixo horizontal usa gestos laterais — impede o swipe-to-go-back */
   overscroll-behavior: none;
@@ -108,6 +110,7 @@ html, body {
 .pill-action {
   border: none;
   cursor: pointer;
+  /* Azul de marca: é tinta sobre a pílula branca, não o azul do fundo */
   color: #0a5eb5;
   font-weight: 400;
   -webkit-tap-highlight-color: transparent;
@@ -150,7 +153,7 @@ html, body {
   clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
 }
 
-.product-layer img {
+.product-layer .cup-photo {
   height: 100vh;
   width: auto;
   object-fit: contain;
@@ -228,6 +231,174 @@ html, body {
    as cores dos copos vivem num sítio só. */
 .product-pill {
   margin-top: 70px;
+}
+
+/* ── Botões de navegação da home ─────────────────────── */
+/* A pílula branca é também o elemento de informação do site ("1 copo =
+   3 pontos"); sem mais nada, estes liam-se como caixas de texto. O que
+   os separa é o disco com a seta — e a seta aponta para onde a página
+   vai mesmo: baixo para o eixo dos copos e para o FAQ, direita para o
+   eixo da informação. É o mesmo desenho de seta do botão de voltar do
+   painel. */
+.pill-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.3em;
+  /* Assimétrico: o disco traz a sua própria folga do lado direito */
+  padding: 0.42em 0.42em 0.42em 1.6em;
+  font-size: 1.55vw;
+}
+
+/* Correcção óptica do rótulo. A Josefin reserva 20 de ascendente para 6 de
+   descendente, e centrar pela caixa de linha deixa o texto fora do meio — mas
+   o valor certo depende do que está escrito:
+
+     minúsculas ("conhece os copos") — o olho equilibra-se entre a x-height
+       e as ascendentes: sobe 0,08em
+     com maiúsculas ("Saber mais? Lê o FAQ") — o olho equilibra pela altura
+       das maiúsculas, que sobe menos: 0,05em
+
+   Contas com a mancha inteira enganam aqui: a cauda do Q conta para o
+   bounding box e não conta para o olho. É por isso que isto é uma variável
+   e não um número fixo. Em translate e não em padding, para poder corrigir
+   nos dois sentidos sem mexer na altura do botão. */
+.pill-nav .rotulo {
+  transform: translateY(var(--optico, -0.08em));
+}
+
+.disco {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 2.1em;
+  height: 2.1em;
+  border-radius: 50%;
+  /* currentColor é o azul do .pill-action: a cor fica num sítio só.
+     O contorno existe já no estado cheio para o hover não mudar a
+     medida do disco — só o preenchimento. */
+  background: currentColor;
+  border: 2px solid currentColor;
+}
+
+.disco svg {
+  width: 1em;
+  height: 1em;
+  color: white;
+}
+
+@media (hover: hover) {
+  /* Estes não sobem: o sinal de hover é o disco a esvaziar-se. */
+  .pill-nav:hover {
+    transform: none;
+    opacity: 1;
+  }
+
+  .disco {
+    transition: background-color 0.3s ease;
+  }
+
+  .disco svg {
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .pill-nav:hover .disco {
+    background: transparent;
+  }
+
+  .pill-nav:hover .disco svg {
+    color: inherit;
+  }
+
+  /* A seta avança na direcção que anuncia, como a do botão de voltar.
+     A de sair do site não se move: o ícone já aponta para fora e o
+     deslocamento diagonal lia-se como tremor. */
+  .pill-nav[data-dir="down"]:hover .disco svg  { transform: translateY(3px); }
+  .pill-nav[data-dir="right"]:hover .disco svg { transform: translateX(3px); }
+}
+
+
+/* ── Ilustrações de Teresa Rego ───────────────────────── */
+/* Uma peça em cima e outra em baixo, sempre maiores do que o ecrã e a
+   sair por três lados. Quem faz a fronteira com o centro é a silhueta
+   da ilustração, nunca um recorte nosso: o ficheiro tem as quatro
+   margens cortadas a direito, e qualquer corte dentro do ecrã deixaria
+   uma aresta a denunciar-se.
+     --zoom  largura da peça, em % da largura do ecrã (>100: as laterais
+             saem sempre para fora)
+     --entra quanto da peça entra no ecrã, em % da altura DELA
+             (em 16:9, --zoom 150 + --entra 17 ≈ um quinto da altura da
+             janela; medir em % da peça mantém a conta independente do
+             formato do ecrã)
+     --fx    que zona da banda fica visível — 0 esquerda, 1 direita */
+/* Duas camadas de propósito: a de fora é do movimento (o GSAP escreve-lhe
+   o transform), a de dentro é da composição. Com tudo no mesmo elemento, a
+   primeira animação apagaria o enquadramento e ele deixava de responder ao
+   redimensionar a janela. */
+.art {
+  --zoom: 170;
+  --entra: 18;
+  --fx: 0.5;
+  position: absolute;
+  width: calc(var(--zoom) * 1vw);
+  left: calc(var(--fx) * (100vw - var(--zoom) * 1vw));
+  pointer-events: none;
+  z-index: 3;
+}
+
+.art img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Topo e rodapé mostram extremos opostos da banda. Nos copos é a mesma
+   peça nos dois sítios: sem isto, as formas repetiam-se à vista. */
+.art-top {
+  --zoom: 150;
+  --entra: 11;
+  --fx: 0.08;
+  top: 0;
+}
+
+.art-bottom {
+  --zoom: 175;
+  --entra: 13;
+  --fx: 0.92;
+  bottom: 0;
+}
+
+.art-top img    { transform: translateY(calc(-100% + var(--entra) * 1%)); }
+.art-bottom img { transform: translateY(calc(100% - var(--entra) * 1%)); }
+
+/* No hero são duas peças diferentes e a ampliação pode ser menor. Nos
+   copos é a mesma banda em cima e em baixo: sem ampliar mais, as duas
+   janelas apanhavam a mesma zona e as formas repetiam-se à vista. Com
+   estes valores vê-se pouco mais de um terço da banda de cada vez —
+   o terço esquerdo em cima, o direito em baixo, sem sobreposição. */
+.product-layer .art-top {
+  --zoom: 200;
+  --entra: 13;
+  --fx: 0;
+}
+
+.product-layer .art-bottom {
+  --zoom: 210;
+  --entra: 15;
+  --fx: 1;
+}
+
+/* A camada do hero é irmã da imagem para poder acompanhar o pan
+   lateral a meia velocidade — o fundo não anda todo à mesma. */
+.hero-art {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
 }
 
 /* ── Painéis do eixo horizontal ──────────────────────── */
@@ -378,17 +549,18 @@ html, body {
   white-space: nowrap;
 }
 
-/* Botão que leva ao FAQ, por scroll do conteúdo */
+/* Botão que leva ao FAQ, por scroll do conteúdo. Leva o mesmo tratamento
+   dos botões da home — disco com seta a apontar para baixo, que é para
+   onde o conteúdo rola. */
 .faq-cta {
   margin-top: 2.4em;
 }
 
-/* Só contorno: é navegação dentro da página, não uma acção como as
-   pílulas da home. */
-.pill-outline {
-  background: transparent;
-  border: 2px solid white;
-  color: white;
+/* O único rótulo com maiúsculas — ver a nota em .pill-nav .rotulo.
+   Aqui a correcção é ao contrário: sem ela, a faixa das maiúsculas já
+   assenta 1,9px acima do meio da cápsula, e subir mais afastava-a. */
+#action-faq {
+  --optico: 0.085em;
 }
 
 /* ── FAQ ─────────────────────────────────────────────── */
@@ -471,6 +643,7 @@ html, body {
 /* ── Hints ───────────────────────────────────────────── */
 .hint {
   position: fixed;
+  color: white;
   z-index: 40;
   opacity: 0;
   cursor: pointer;
@@ -489,10 +662,13 @@ html, body {
   gap: 8px;
 }
 
+/* A cor vem do contentor, que o engine acerta à tinta do ecrã: sobre o
+   amarelo do limão, um hint branco desaparecia. O ícone segue-a por
+   currentColor. */
 .hint-label {
   font-family: 'Caveat', cursive;
   font-size: 1.3rem;
-  color: white;
+  color: inherit;
   white-space: nowrap;
 }
 
@@ -558,18 +734,25 @@ html, body {
 
   .product-pre { margin-bottom: 15px; }
 
-  /* O texto cai sobre o copo, que é claro em todos os sabores —
-     a sombra é o que o mantém legível */
+  /* O texto cai sobre o copo — o halo é o que o mantém legível. A cor vem
+     do engine, porque depende da tinta do sabor (ver buildProducts). */
   .product-body {
     font-size: 3.6vw;
     margin-top: auto;
-    text-shadow: 0 0 30px rgba(0, 0, 0, 0.55), 0 1px 12px rgba(0, 0, 0, 0.4);
+    text-shadow: 0 0 30px var(--halo), 0 0 12px var(--halo), 0 1px 6px var(--halo);
   }
 
   .pill {
     font-size: 3.6vw;
     font-weight: 400;
     padding: 0.5em 1.2em;
+  }
+
+  /* O disco traz a sua própria folga: sem isto, a regra de cima dava-lhe
+     1,2em à direita e ele descolava da borda do botão. */
+  .pill-nav {
+    padding: 0.4em 0.4em 0.4em 1.3em;
+    gap: 0.8em;
   }
 
   /* Folga suficiente para o hint, que aqui tem legenda por cima do ícone */
@@ -608,7 +791,6 @@ html, body {
   }
 
   .step-num    { font-size: 4.6vw; border-width: 1px; }
-  .pill-outline { border-width: 1px; }
   .step-title { font-size: 5vw; }
   .step-body  { font-size: 3.6vw; }
 
@@ -632,4 +814,15 @@ html, body {
   .hint-label {
     font-size: 1.1rem;
   }
+
+  /* Em retrato a peça é muito mais alta em relação ao ecrã: com a mesma
+     ampliação do desktop entrava uma nesga. Cresce para compensar.
+     Os copos repetem aqui o selector com a camada — a regra mais
+     específica ganha à media query, e sem isto ficavam nos valores
+     de desktop. */
+  .art-top    { --zoom: 290; --entra: 13; }
+  .art-bottom { --zoom: 320; --entra: 15; }
+
+  .product-layer .art-top    { --zoom: 330; --entra: 13; }
+  .product-layer .art-bottom { --zoom: 360; --entra: 20; }
 }
