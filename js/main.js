@@ -1,6 +1,7 @@
 // ── Arranque ────────────────────────────────────────────
 
 buildProducts();
+buildFaq();
 
 // ── FAQ ─────────────────────────────────────────────────
 // O FAQ está sempre aberto e vive no fim do painel "como obter".

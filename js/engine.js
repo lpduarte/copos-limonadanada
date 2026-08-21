@@ -69,6 +69,62 @@ function buildProducts() {
   });
 }
 
+// ── Construção do FAQ ───────────────────────────────────
+// São 23 perguntas: abertas de origem davam quase sete ecrãs de scroll,
+// por isso abrem uma a uma. A abertura é animada pelo GSAP como o resto do
+// site — de altura 0 até à altura medida, e depois solta para 'auto', senão
+// o texto ficava preso a uma altura fixa ao redimensionar a janela.
+function buildFaq() {
+  const host = document.getElementById('faq-lista');
+
+  host.innerHTML =
+    '<div class="faq">' +
+      FAQ.map((item, i) => {
+        const id = 'faq-' + i;
+        return '<div class="faq-item">' +
+          '<h3 class="faq-cabeca">' +
+            '<button class="faq-q" aria-expanded="false" aria-controls="' + id + '">' +
+              '<span class="faq-q-texto">' + item.q + '</span>' +
+              '<span class="faq-sinal" aria-hidden="true">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" ' +
+                'stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>' +
+              '</span>' +
+            '</button>' +
+          '</h3>' +
+          '<div class="faq-resposta" id="' + id + '" hidden>' +
+            '<p class="faq-a">' + item.a + '</p>' +
+          '</div>' +
+        '</div>';
+      }).join('') +
+    '</div>';
+
+  host.addEventListener('click', (e) => {
+    const botao = e.target.closest('.faq-q');
+    if (botao) alternarPergunta(botao);
+  });
+}
+
+function alternarPergunta(botao) {
+  const painel = document.getElementById(botao.getAttribute('aria-controls'));
+  const abrir = botao.getAttribute('aria-expanded') === 'false';
+
+  botao.setAttribute('aria-expanded', abrir ? 'true' : 'false');
+  gsap.killTweensOf(painel);
+
+  if (abrir) {
+    painel.hidden = false;
+    gsap.fromTo(painel,
+      { height: 0, opacity: 0 },
+      { height: 'auto', opacity: 1, duration: 0.45, ease: EASE,
+        onComplete: () => gsap.set(painel, { clearProps: 'height' }) });
+  } else {
+    gsap.to(painel, {
+      height: 0, opacity: 0, duration: 0.35, ease: 'power2.in',
+      onComplete: () => { painel.hidden = true; gsap.set(painel, { clearProps: 'height' }); }
+    });
+  }
+}
+
 // ── Posição do copo ─────────────────────────────────────
 // Em desktop o copo desloca-se para a direita para abrir espaço ao texto;
 // em mobile cresce e o texto empilha por cima.

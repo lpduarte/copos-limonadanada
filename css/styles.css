@@ -592,21 +592,75 @@ html, body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.35);
 }
 
-/* Sempre aberto — são três perguntas, não vale a pena esconder */
+/* O <h4> existe para o FAQ ter uma estrutura de títulos navegável;
+   quem carrega é o botão lá dentro. */
+.faq-cabeca {
+  font-size: inherit;
+  font-weight: inherit;
+}
+
 .faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5em;
+  width: 100%;
+  padding: 1.1em 0;
+  background: none;
+  border: none;
+  color: inherit;
+  font-family: inherit;
   font-size: 1.6vw;
   font-weight: 700;
   line-height: 1.3;
-  text-transform: none;
-  padding-top: 1.4em;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq-q:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+@media (hover: hover) {
+  .faq-q { transition: opacity 0.2s ease; }
+  .faq-q:hover { opacity: 0.72; }
+}
+
+/* Roda meia volta quando abre — o mesmo desenho de seta do resto do site */
+.faq-sinal {
+  display: flex;
+  flex: none;
+  width: 1.4em;
+  height: 1.4em;
+  transition: transform 0.35s ease;
+}
+
+.faq-sinal svg {
+  width: 100%;
+  height: 100%;
+}
+
+.faq-q[aria-expanded="true"] .faq-sinal {
+  transform: rotate(180deg);
+}
+
+/* A altura é animada pelo GSAP; aqui só se garante que nada transborda
+   enquanto ela muda. */
+.faq-resposta {
+  overflow: hidden;
 }
 
 .faq-a {
+  /* Medida de leitura: à largura dos cartões, uma resposta destas dava
+     linhas de mais de 100 caracteres. */
+  max-width: 62ch;
   font-size: 1.3vw;
   font-weight: 300;
   line-height: 1.7;
-  padding-top: 0.5em;
-  padding-bottom: 1.4em;
+  padding-bottom: 1.6em;
 }
 
 /* ── Voltar ──────────────────────────────────────────── */

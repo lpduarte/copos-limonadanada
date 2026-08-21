@@ -3,18 +3,19 @@
 ## Estrutura
 
 ```
-index.html          hero, painéis (como obter, FAQ), hints
+index.html          hero, painel "como obter", hints
 css/styles.css
 js/content.js       conteúdo e configuração — é aqui que se mexe
-js/engine.js        motor de navegação, transições
-js/main.js          arranque, acordeão da FAQ
+js/engine.js        motor de navegação, transições, construção dos blocos
+js/main.js          arranque e salto para o FAQ
 img/
 img/ilustracoes/    as três bandas .svg de Teresa Rego
 ```
 
 A separação é intencional: **`content.js` é o único ficheiro que precisa de ser
 tocado para mudar copy, cores, ordem dos blocos ou texto dos hints.** Os três
-blocos de copo são gerados a partir de `PRODUCTS[]` — não há HTML repetido.
+blocos de copo são gerados a partir de `PRODUCTS[]` e as 23 perguntas do FAQ a
+partir de `FAQ[]` — não há HTML repetido.
 
 ## Navegação
 
@@ -312,6 +313,58 @@ mesma arte que está impressa no copo, ampliada. Lê-se como coerência e não c
 repetição, mas é uma relação nova — vale a pena olhar para isso quando entrar a
 copy definitiva.
 
+## FAQ
+
+As 23 perguntas vivem em `FAQ[]` (`content.js`), como lista corrida, e são
+construídas por `buildFaq()` (`engine.js`). **A copy mexe-se sem tocar em
+estrutura** — era HTML escrito à mão enquanto foram três perguntas.
+
+O h3 enviou 25; ficaram 23, com duas fusões de perguntas que tinham a mesma
+resposta:
+
+- *Posso trocar na App h3?* + *Posso trocar num Kiosk?* → uma só, porque a
+  resposta era a mesma ("só ao balcão").
+- *Os três modelos estarão sempre disponíveis?* + *Os copos têm stock
+  limitado?* → uma só, pela mesma razão.
+
+Continuam três perguntas diferentes a dizer que a troca é só ao balcão (*onde
+trocar*, *App ou Kiosk*, *Delivery*). É de propósito: num FAQ cada pessoa
+procura pela pergunta que tem na cabeça.
+
+**Sem secções.** Chegaram a estar agrupadas por tema, com títulos, e saíram: há
+perguntas que servem dois grupos ao mesmo tempo — o stock é dos copos e é da
+troca; a conta na App é da campanha e é de trocar pontos — e a arrumação
+impunha uma ordem que não existe. Sem títulos, a sequência continua a ir do
+geral para o particular, e os comentários em `content.js` marcam-na para quem
+edita. Ao acrescentar perguntas, é aí que se decide onde entram.
+
+A resposta **"Quem é a Teresa Rego?"** não é a que o h3 enviou — é a que já cá
+estava, escrita a partir do site dela, com a formação, o estúdio e as marcas.
+A do h3 dizia apenas que é a artista das ilustrações. Continua por validar (ver
+**Texto sobre a ilustradora**).
+
+### Porque é acordeão
+
+| | altura do painel | ecrãs de scroll |
+|---|---|---|
+| tudo fechado | 2.990px | 3,7 |
+| tudo aberto | ~5.200px | 6,4 |
+
+Com três perguntas estavam sempre abertas e o CSS dizia-o. Com 23 deixou de
+dar. Abrem-se **de forma independente** e não uma-de-cada-vez: há respostas que
+se comparam entre si (as das quantidades de pontos, por exemplo).
+
+### A animação
+
+A altura vai de 0 até `auto` com o GSAP, como o resto do site, e no fim
+**larga-se a altura** (`clearProps`). Sem isso o painel ficava preso à altura
+medida no momento da abertura e o texto transbordava ao redimensionar a janela
+ou ao rodar o telemóvel.
+
+A resposta tem `max-width: 62ch`: à largura dos cartões, estas respostas davam
+linhas de mais de 100 caracteres. A pergunta e a linha divisória continuam à
+largura toda.
+
 ## Números dos passos
 
 Os círculos ficam a cavalo na borda de cima do cartão. Para a linha não
@@ -351,10 +404,11 @@ seta) e o mesmo azul no destaque "1 copo = 3 pontos" do painel.
 
 ## Datas
 
-O briefing tinha duas datas de fim (31 de outubro no enquadramento, 30 de
-outubro na FAQ). Está implementado **30 de outubro de 2026**, em dois sítios do
-`index.html`: a nota do painel "Como Obter" e a resposta "Até quando decorre
-a campanha?".
+O briefing tinha duas datas de fim: 31 de outubro no enquadramento, 30 de
+outubro na FAQ. O texto do FAQ que o h3 enviou depois diz **31 de outubro de
+2026**, e é essa que está implementada — em dois sítios: o passo 3 do painel
+"Como Obter" (`index.html`) e a resposta "Quando decorre a campanha?"
+(`content.js`).
 
 ## Header
 
@@ -390,7 +444,9 @@ pedida no briefing é para o menu do h3.com.
 ## Acessibilidade
 
 Feito: `aria-hidden` nos decorativos, `aria-label` no botão voltar e nos
-painéis, `aria-expanded` na FAQ, navegação por setas do teclado.
+painéis, navegação por setas do teclado. No FAQ, cada pergunta é um `<button>`
+com `aria-expanded` e `aria-controls`, dentro de um `h3` para a lista ser
+navegável por títulos, com `:focus-visible` desenhado.
 
-Falta: foco visível nos elementos interactivos e ordem de tabulação — o site
-não foi pensado para navegação exclusivamente por teclado.
+Falta: foco visível no resto dos elementos interactivos e ordem de tabulação —
+fora do FAQ, o site não foi pensado para navegação exclusivamente por teclado.
