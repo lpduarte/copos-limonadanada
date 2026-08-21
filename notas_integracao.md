@@ -267,13 +267,13 @@ Valores por contexto:
 
 | | topo | rodapé |
 |---|---|---|
-| hero (desktop) | 150 / 11 / 0,08 | 175 / 13 / 0,92 |
+| hero (desktop) | — | 175 / 13 / 0,92 |
 | copos (desktop) | 200 / 13 / 0 | 210 / 15 / 1 |
-| hero (mobile) | 290 / 13 | 320 / 15 |
+| hero (mobile) | — | 320 / 15 |
 | copos (mobile) | 330 / 13 | 360 / 20 |
 
-No hero são **duas peças diferentes** (morango em cima, limão em baixo — o
-maracujá não entra). Nos copos é a **mesma peça nos dois sítios**, e é por isso
+No hero há **uma só peça**, no rodapé (o limão): a de cima competia com o
+título e saiu a pedido do h3. Nos copos é a **mesma peça nos dois sítios**, e é por isso
 que ali a ampliação é maior: a `--zoom` do hero, as duas janelas apanhavam a
 mesma zona da banda e as formas repetiam-se à vista. A 200%/210% vê-se pouco
 mais de metade da banda de cada vez — a metade esquerda em cima, a direita em
@@ -288,10 +288,10 @@ repetir o mesmo selector, senão os copos ficam nos valores de desktop.
 
 O ficheiro de cada sabor é dado do produto (`PRODUCTS[].art`, em
 `content.js`) e o engine constrói as duas peças dentro da camada do copo — o
-mesmo `clip-path` do wipe leva a ilustração com ele. As do hero estão no
-`index.html`, numa camada à parte (`#hero-art`) porque têm movimento próprio:
-**pertencem ao hero e saem com ele**. Ao passar para o painel, a peça de cima
-sobe e a de baixo desce até saírem de vista (`yPercent` ∓20 — um pouco mais do
+mesmo `clip-path` do wipe leva a ilustração com ele. A do hero está no
+`index.html`, numa camada à parte (`#hero-art`) porque tem movimento próprio:
+**pertence ao hero e sai com ele**. Ao passar para o painel, desce até sair de
+vista (`yPercent` ∓20 — um pouco mais do
 que o `--entra`, por isso vale em qualquer formato de ecrã); ao voltar, entram
 outra vez. O painel é texto denso e não as quer por trás.
 

@@ -278,14 +278,12 @@ function panTo(fromId, toId, tl) {
 
   // A imagem desliza e recua para segundo plano: os painéis são texto
   // denso e não competem bem com os copos nítidos por trás.
-  // As ilustrações pertencem ao hero: quando se sai dele, recolhem pelas
-  // bordas por onde entraram e saem de vista — o painel é texto denso e
-  // não as quer por trás. Ao voltar, entram outra vez.
+  // A ilustração pertence ao hero: quando se sai dele, recolhe pela borda
+  // por onde entrou e sai de vista — o painel é texto denso e não a quer
+  // por trás. Ao voltar, entra outra vez.
   // O deslocamento é em percentagem da própria peça, um pouco acima do
   // que está dentro do ecrã (--entra), por isso vale em qualquer formato.
-  const recolhe = toIdx > 0;
-  tl.to('#hero-art .art-top',    { yPercent: recolhe ? -20 : 0, duration: D, ease: EASE_MOVE }, 0)
-    .to('#hero-art .art-bottom', { yPercent: recolhe ?  20 : 0, duration: D, ease: EASE_MOVE }, 0);
+  tl.to('#hero-art .art-bottom', { yPercent: toIdx > 0 ? 20 : 0, duration: D, ease: EASE_MOVE }, 0);
 
   tl.to('.hero-img', { x: -step * toIdx, duration: D, ease: EASE_MOVE }, 0)
     .to('.hero-img', { filter: toIdx > 0 ? 'blur(14px)' : 'blur(0px)', duration: D, ease: EASE_MOVE }, 0)

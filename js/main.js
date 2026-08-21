@@ -34,11 +34,10 @@ const introTl = gsap.timeline({
   onComplete: showHints
 });
 
-// As ilustrações chegam do bordo antes do texto: primeiro monta-se o
-// cenário, depois entra a mensagem. Deslocam-se em percentagem da própria
-// peça, por isso o valor vale em qualquer ecrã.
-introTl.from('#hero-art .art-top',    { yPercent: -18, opacity: 0, duration: 1.6, ease: EASE_MOVE }, 0)
-       .from('#hero-art .art-bottom', { yPercent:  18, opacity: 0, duration: 1.6, ease: EASE_MOVE }, 0.12);
+// A ilustração chega do bordo antes do texto: primeiro monta-se o cenário,
+// depois entra a mensagem. Desloca-se em percentagem da própria peça, por
+// isso o valor vale em qualquer ecrã.
+introTl.from('#hero-art .art-bottom', { yPercent: 18, opacity: 0, duration: 1.6, ease: EASE_MOVE }, 0);
 
 revealIn(document.getElementById('hero-text'), introTl, 0);
 
